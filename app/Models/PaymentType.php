@@ -19,10 +19,6 @@ class PaymentType extends Model
         'pay_t_exst'
     ];
 
-    public static function getAvailable(){
-        return PaymentType::where('pay_t_exst', 1)->get();
-    }
-
     public function orders()
     {
         return $this->hasMany(Order::class, 'f_pay_t_id');

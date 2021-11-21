@@ -4,7 +4,7 @@ namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Classes\Categories;
 
 class CategoryController extends Controller
 {
@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        $this->categories = Category::All();
+        $this->categories = new Categories();
     }
     
     /**
@@ -23,11 +23,11 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        if (!empty($category = Category::getById($id))){
-            return view('user.category')
-            ->with('category_products', $category->paginate(12))
-            ->with('categories', $this->categories);
-        }else return abort(404);
+        if (!empty($this->categories->getById($id))){
+        return view('user.category')
+            ->with('category_products', $this->categories->getById($id)->paginate(12))
+            ->with('categories', $this->categories->getAll());
+        }else abort(404);
 
     }
 }

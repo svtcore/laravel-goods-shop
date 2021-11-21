@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c7b1c4a48a2691eabc1a2643e955329",
+    "content-hash": "309dfcfa9918cd37531d83e56dd06bc4",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -5267,16 +5267,16 @@
         },
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v2.9.0",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "64a6b902583802c162cdccf7e76dc8619368bf1a"
+                "reference": "73b1012b927633a1b4cd623c2e6b1678e6faef08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/64a6b902583802c162cdccf7e76dc8619368bf1a",
-                "reference": "64a6b902583802c162cdccf7e76dc8619368bf1a",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/73b1012b927633a1b4cd623c2e6b1678e6faef08",
+                "reference": "73b1012b927633a1b4cd623c2e6b1678e6faef08",
                 "shasum": ""
             },
             "require": {
@@ -5287,6 +5287,7 @@
                 "illuminate/console": "^8",
                 "illuminate/filesystem": "^8",
                 "illuminate/support": "^8",
+                "nikic/php-parser": "^4.7",
                 "php": "^7.3 || ^8.0",
                 "phpdocumentor/type-resolver": "^1.1.0"
             },
@@ -5300,6 +5301,9 @@
                 "phpunit/phpunit": "^8.5 || ^9",
                 "spatie/phpunit-snapshot-assertions": "^3 || ^4",
                 "vimeo/psalm": "^3.12"
+            },
+            "suggest": {
+                "illuminate/events": "Required for automatic helper generation (^6|^7|^8)."
             },
             "type": "library",
             "extra": {
@@ -5341,7 +5345,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-ide-helper/issues",
-                "source": "https://github.com/barryvdh/laravel-ide-helper/tree/v2.9.0"
+                "source": "https://github.com/barryvdh/laravel-ide-helper/tree/v2.10.0"
             },
             "funding": [
                 {
@@ -5349,7 +5353,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-29T10:11:05+00:00"
+            "time": "2021-04-09T06:17:55+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",

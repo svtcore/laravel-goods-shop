@@ -6,7 +6,10 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Session;
+use Exception;
+use App\Classes\Categories;
+use App\Classes\Products;
+use App\Http\Requests\user\products\SearchRequest;
 
 class ProductController extends Controller
 {
@@ -15,7 +18,8 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $this->categories = Category::All();
+        $this->categories = new Categories();
+        $this->products = new Products();
     }
 
     /**
@@ -25,7 +29,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('user.home')->with('products_main', Product::getRandomProducts(8))->with('categories', $this->categories);
+        return view('user.home')
+                ->with('products_main', $this->products->getRandom(8))
+                ->with('categories', $this->categories->getAll());
     }
 
     /**
@@ -33,20 +39,19 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        if (!empty($product = Product::getById($id)))
-            return view('user.product')->with('product_info', $product)->with('categories', $this->categories);
+        if (!empty($product = $this->products->getById($id)))
+            return view('user.product')
+                ->with('product_info', $product)
+                ->with('categories', $this->categories->getAll());
         else abort(404);
 
     }
 
-    public function search(Request $request){
+    public function search(SearchRequest $request){
         try{
-            $validated = $request->validate([
-                'query' => 'regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.#%№%?!:;,-]+$/i|min:1|max:255',
-            ]);
-
+            $validated = $request->validated();
             $lang = app()->getLocale();
-            $results = Product::search($validated['query']);
+            $results = $this->products->search($validated['query']);
             foreach ($results as $result){
                 $name = "product_name_lang_".$lang;
                 $category = "catg_name_".$lang;

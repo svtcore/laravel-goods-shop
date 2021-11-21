@@ -25,8 +25,4 @@ class Category extends Model
     public function products(){
         return $this->hasMany(Product::class, 'f_catg_id');
     }
-
-    public static function getById($id){
-        return Category::where('catg_id', $id)->with('products','products.names', 'products.images', 'products.descriptions');
-    }
 }

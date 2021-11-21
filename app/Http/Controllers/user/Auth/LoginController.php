@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Requests\UserAuthRequest;
+use App\Classes\Categories;
 
 
 class LoginController extends Controller
@@ -23,7 +24,9 @@ class LoginController extends Controller
     }
 
     public function index(){
-        return view('user.auth.login')->with('categories', Category::All());
+        $this->categories = new Categories();
+        return view('user.auth.login')
+            ->with('categories', $this->categories->getAll());
     }
 
     public function authenticate(UserAuthRequest $request)
