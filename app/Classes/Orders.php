@@ -5,9 +5,6 @@ namespace App\Classes;
 
 use App\Models\Order;
 use App\Classes\Products;
-use App\Models\Product;
-use Carbon\Carbon;
-use DB;
 use Exception;
 
 class Orders
@@ -77,6 +74,55 @@ class Orders
         }
     }
 
+    public function update($id, $request, $manager)
+    {
+        try {
+            $validation_rules = $this->validate_rules($id, $request);
+            $validated = $request->validate($validation_rules);
+            $prod_obj = new Products();
+            $order_prod = new OrderProducts();
+            foreach ($validated as $key => $value) {
+                if (str_starts_with($key, 'product_count')) {
+                    $apart = explode("_", $key);
+                    $product_id = $apart[2];
+                    if ($value != 0) {
+                        $product_data = $prod_obj->getPrice($product_id);
+                        $new_price = $product_data->product_price * $value;
+                        $order_prod->updateCountPrice($product_id, $value, $new_price);
+                    } elseif ($value == 0) {
+                        $order_prod->deleteByProductId($product_id, $id);
+                    }
+                }
+            }
+            $sum = $order_prod->getSumByOrderId($id);
+            if ($sum > 0) {
+                $data = [
+                    'order_fname' => $validated['f_name'],
+                    'order_lname' => $validated['l_name'],
+                    'order_phone' => $validated['phone'],
+                    'f_pay_t_id' => $validated['payment'],
+                    'order_full_price' => $sum,
+                    'order_note' => $validated['note'],
+                    'order_code' => $validated['code'],
+                    'order_status' => $validated['status']
+                ];
+                Order::where('order_id', $id)->update($data);
+                $data = [
+                    'user_str_name' => $validated['street'],
+                    'user_house_num' => $validated['house'],
+                    'user_ent_num' => $validated['entrance'],
+                    'user_apart_num' => $validated['appart'],
+                    'user_code' => $validated['code']
+                ];
+                Order::find($id)->user_addresses()->update($data);
+            } else {
+                $this->updateStatus($id, "canceled", $manager);
+            }
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
     /**
      * Formation cookies to array when get cart page
      */
@@ -110,6 +156,34 @@ class Orders
     }
 
     /**
+     * Validate rules data through method because some of orders have unknown id
+     * so request validate form doesnt correct for this task
+     */
+    public function validate_rules($id)
+    {
+        try {
+            $product_obj = new OrderProducts();
+            $validation_array = array();
+            $data = $product_obj->getByOrderId($id);
+            foreach ($data as $product)
+                $validation_array["product_count_" . $product->f_product_id] = "required|numeric|min:0";
+            $validation_array['f_name'] = 'required|regex:/^[a-zа-яÀ-ÿẞ\s.,-]+$/i|min:2|max:50';
+            $validation_array['l_name'] = 'required|regex:/^[a-zа-яÀ-ÿẞ\s.,-]+$/i|min:2|max:50';
+            $validation_array['phone'] = 'required|digits_between:10,25';
+            $validation_array['street'] = 'required|regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.,-]+$/i|min:2|max:100';
+            $validation_array['house'] = 'required|regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.,-]+$/i|min:1|max:5';
+            $validation_array['appart'] = 'nullable|regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.,-]+$/i|min:1|max:5';
+            $validation_array['entrance'] = 'nullable|digits_between:1,5';
+            $validation_array['code'] = 'nullable|regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.#%№,-]+$/i|min:1|max:10';
+            $validation_array['payment'] = 'required|digits_between:1,100|min:1|max:3';
+            $validation_array['note'] = 'nullable|regex:/^[a-zа-яÀ-ÿ0-9ẞ\s.#%№%()?!:;=,-]+$/i|min:1|max:255';
+            $validation_array['status'] = 'required|regex:/^[a-zа-яÀ-ÿẞ\s.,-]+$/i|min:2|max:50';
+            return $validation_array;
+        } catch (Exception $e) {
+        }
+    }
+
+    /**
      * Subfunction to formation product name by user language
      */
     public function getCurrentProductLangName($data)
@@ -133,22 +207,22 @@ class Orders
         return Order::where('order_id', $id)->update(['order_full_price' => $data]);
     }
 
-    public static function getOrdersByStatus($status)
+    public static function getByStatus($status)
     {
         return Order::where('order_status', $status)
-            ->with(['users',  'payment_types' => function ($q) {
-                $q->withTrashed();
-            }, 'user_addresses', 'order_products' => function ($q) {
-                $q->withTrashed();
-            }, 'order_products.products' => function ($q) {
-                $q->withTrashed();
-            }, 'order_products.products.names' => function ($q) {
-                $q->withTrashed();
-            }])
+            ->with([
+                'users',  'payment_types' => function ($q) {
+                    $q->withTrashed();
+                }, 'user_addresses', 'order_products', 'order_products.products' => function ($q) {
+                    $q->withTrashed();
+                }, 'order_products.products.names' => function ($q) {
+                    $q->withTrashed();
+                }
+            ])
             ->orderby('order_id', 'asc');
     }
 
-    public static function updateStatus($id, $status, $manager)
+    public function updateStatus($id, $status, $manager)
     {
         return Order::where('order_id', $id)->update(
             [
@@ -158,13 +232,11 @@ class Orders
         );
     }
 
-    public static function getById($id)
+    public function getById($id)
     {
         return Order::where('order_id', $id)
             ->with([
-                'order_products' => function ($q) {
-                    $q->withTrashed();
-                },
+                'order_products',
                 'user_addresses',
                 'order_products.products' => function ($q) {
                     $q->withTrashed();
@@ -185,7 +257,7 @@ class Orders
             ->orderby('order_id', 'desc')->withTrashed()->first();
     }
 
-    public static function search($query)
+    public function search($query)
     {
         return Order::select(
             'orders.order_id',
@@ -207,7 +279,7 @@ class Orders
             ->withTrashed()->get();
     }
 
-    public static function getAllOrdersData()
+    public function getAllOrdersData()
     {
         return Order::with([
             'users', 'payment_types' => function ($q) {
@@ -218,12 +290,12 @@ class Orders
             ->withTrashed()->orderby('order_id', 'desc');
     }
 
-    public static function getDayCount($status, $from, $to)
+    public function getDayCount($status, $from, $to)
     {
         return Order::where('order_status', $status)->whereBetween('created_at', [$from, $to])->count();
     }
 
-    public static function getMoneyData($from, $to)
+    public function getMoneyData($from, $to)
     {
         return Order::where('order_status', "completed")->whereBetween('created_at', [$from, $to])->sum('order_full_price');
     }

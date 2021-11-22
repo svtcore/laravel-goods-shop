@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Classes\Orders;
+use Exception;
 
 class HomeController extends Controller
 {
     public function __construct()
     {
+        $this->orders = new Orders();
         $this->middleware('auth:admin');
     }
     /**
@@ -19,12 +22,12 @@ class HomeController extends Controller
      * counted by each state of orders
      * return array with count of each states
      */
-    public function Orders($days){
+    public function orders($days){
         try{
             $states = ['created', 'processing','canceled', 'completed'];
             $results = [];
             foreach($states as $state)
-                $results[$days."_days"][$state] = Order::getDayCount($state, date('Y-m-d 00:00:00', strtotime('-'.$days.' days')) , date('Y-m-d 23:59:59'));
+                $results[$days."_days"][$state] = $this->orders->getDayCount($state, date('Y-m-d 00:00:00', strtotime('-'.$days.' days')) , date('Y-m-d 23:59:59'));
             $results[$days."_days"]['total'] = array_sum($results[$days."_days"]);
             return $results;
         }
@@ -39,9 +42,9 @@ class HomeController extends Controller
      * Getting sum of money from n days ago to now
      * return array with sum of orders with state 'completed'
      */
-    public function Incomes($days){
+    public function incomes($days){
         try{
-            $results[$days."_days"]['total'] = Order::getMoneyData(date('Y-m-d 00:00:00', strtotime('-'.$days.' days')) , date('Y-m-d 23:59:59'));
+            $results[$days."_days"]['total'] = $this->orders->getMoneyData(date('Y-m-d 00:00:00', strtotime('-'.$days.' days')) , date('Y-m-d 23:59:59'));
             return $results;
         }
         catch(Exception $e){

@@ -31,9 +31,9 @@ class OrderProduct extends Model
         return $this->belongsTo(Product::class, 'f_product_id');
     }
 
-    public static function getByOrderId($id){
+    /*public static function getByOrderId($id){
         return OrderProduct::where('f_order_id', $id)->withTrashed()->get();
-    }
+    }*/
 
     public static function deleteByProductId($id){
         return OrderProduct::where('f_product_id', $id)->delete();

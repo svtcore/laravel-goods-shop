@@ -3,7 +3,7 @@
 @section('content')
 <h4 class="category_header">{{ __('manager_order_edit.title', ['order_id' => $order->order_id ]) }}</h4>
 <div class="container">
-<form action="{{ route('manager.order.update',['id' => $order->order_id ]) }}" method="POST">
+<form action="{{ route('manager.order.update', ['id' => $order->order_id ]) }}" method="POST">
 @method('PUT')
 @csrf
 <table class="table table-hover">

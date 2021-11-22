@@ -39,9 +39,4 @@ class Manager extends Authenticatable
     public function orders(){
         return $this->hasMany(Order::class, 'f_manager_id');
     }
-
-     public static function getOrdersByManagerId($id){
-        return Manager::where('manager_id', $id)
-                        ->with(['orders' => function($q) {$q->withTrashed();}, 'orders.payment_types' => function($q) {$q->withTrashed();},'orders.user_addresses' => function($q) {$q->withTrashed();}, 'orders.order_products' => function($q) {$q->withTrashed();},'orders.order_products.products' => function($q) {$q->withTrashed();}, 'orders.order_products.products.names' => function($q) {$q->withTrashed();}]);
-     }
 }

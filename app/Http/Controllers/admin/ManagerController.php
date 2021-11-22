@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Manager;
 use App\Http\Requests\ManagerRequest;
-use App\Http\Requests\ManagerUpdateRequest;
+use App\Http\Requests\admin\managers\StoreRequest;
+use App\Http\Requests\admin\managers\UpdateRequest;
+use Exception;
+use App\Classes\Managers;
 
 class ManagerController extends Controller
 {
 
     public function __construct()
     {
+        $this->managers = new Managers();
         $this->middleware('auth:admin');
     }
 
@@ -21,9 +25,9 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $manage = Manager::withCount('orders')->get();
-        if (count($manage) > 0)
-            return view('admin.managers')->with('managers', Manager::withCount('orders')->paginate(15));
+        $managers = $this->managers->getAll()->get();
+        if (count($managers) > 0)
+            return view('admin.managers')->with('managers', $this->managers->getAll()->paginate(15));
         else return view('admin.managers')->with('managers', null);
     }
 
@@ -37,9 +41,10 @@ class ManagerController extends Controller
      * and if data validate 
      * run the function addManager for formation and record data
      */
-    public function store(ManagerRequest $request)
+    public function store(StoreRequest $request)
     {
-        $this->addManager($request);
+        $validated = $request->validated();
+        $this->managers->add($validated);
         return redirect()->route('admin.managers');
     }
 
@@ -48,9 +53,8 @@ class ManagerController extends Controller
      */
     public function edit($id)
     {
-        $data = Manager::where('manager_id', $id)->first();
-        if (!empty($data))
-            return view('admin.manager_edit')->with('manager', $data);
+        if (!empty($manager = $this->managers->getById($id)))
+            return view('admin.manager_edit')->with('manager', $manager);
         else return abort(404);
     }
 
@@ -58,10 +62,11 @@ class ManagerController extends Controller
      * Validate data through Requests\ManagerRequest and 
      * run function updateManager for formation and update data
      */
-    public function update(ManagerUpdateRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        if ($request->type == "edit_data"){
-            $this->updateManager($request, $id);
+        if ($request->type == "edit_data") {
+            $validated = $request->validated();
+            $this->managers->update($validated, $id);
             return redirect()->route('admin.managers');
         }
         return redirect()->back();
@@ -72,7 +77,7 @@ class ManagerController extends Controller
      */
     public function destroy($id)
     {
-        Manager::where('manager_id', $id)->delete();
+        $this->managers->delete($id);
         return redirect()->route('admin.managers');
     }
 
@@ -80,51 +85,9 @@ class ManagerController extends Controller
      * Getting orders which manager was taken
      * Return view with object data 
      */
-    public function orders($id){
-        $orders = Manager::getOrdersByManagerId($id)->paginate(15);
+    public function orders($id)
+    {
+        $orders = $this->managers->getOrdersByManagerId($id)->paginate(15);
         return view('admin.manager_orders')->with('managers', $orders);
-    }
-
-    /**
-     * Formation data to array and create record in db
-     */
-    public function addManager($request){
-        try{
-            $data = [
-                'manager_fname' => $request->f_name, 
-                'manager_lname' => $request->l_name,
-                'manager_mname' => $request->m_name,
-                'manager_phone' => $request->phone, 
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ];
-            Manager::create($data);
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors(['message' => 'Failed to add manager data']);
-        }
-    }
-
-
-    /**
-     * Formation data to array and create record in db
-     */
-    public function updateManager($request, $id){
-        try{
-            $data = [
-                'manager_fname' => $request->f_name, 
-                'manager_lname' => $request->l_name,
-                'manager_mname' => $request->m_name,
-                'manager_phone' => $request->phone, 
-                'email' => $request->email,
-            ];
-            if ($request->password != null || !empty($request->password)){
-                $data['password'] = bcrypt($request->password);
-            }
-            Manager::where('manager_id', $id)->update($data);
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors(['message' => 'Failed to update manager data']);
-        }
     }
 }
