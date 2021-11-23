@@ -222,6 +222,20 @@ class Orders
             ->orderby('order_id', 'asc');
     }
 
+    public function getAll()
+    {
+        return Order::with([
+                'users',  'payment_types' => function ($q) {
+                    $q->withTrashed();
+                }, 'user_addresses', 'order_products', 'order_products.products' => function ($q) {
+                    $q->withTrashed();
+                }, 'order_products.products.names' => function ($q) {
+                    $q->withTrashed();
+                }
+            ])
+            ->orderby('order_id', 'desc');
+    }
+
     public function updateStatus($id, $status, $manager)
     {
         return Order::where('order_id', $id)->update(

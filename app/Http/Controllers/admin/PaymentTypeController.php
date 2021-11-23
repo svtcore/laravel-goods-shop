@@ -72,7 +72,7 @@ class PaymentTypeController extends Controller
      */
     public function destroy($id)
     {
-        if (!empty($payment = $this->payments->getById($id)))
+        if (!empty($this->payments->getById($id)))
             $this->payments->delete($id);
         return redirect()->route('admin.payments');
     }

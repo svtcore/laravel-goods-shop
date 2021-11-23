@@ -24,10 +24,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name_en' => '',
-            'category_name_de' => '',
-            'category_name_uk' => '',
-            'category_name_ru' => '',
+            'category_name_en' => 'required|regex:/^[a-zа-я0-9À-ÿẞ\s.,-]+$/i|min:2|max:50',
+            'category_name_de' => 'nullable|regex:/^[a-zа-я0-9À-ÿẞ\s.,-]+$/i|min:2|max:50',
+            'category_name_uk' => 'nullable|regex:/^[a-zа-я0-9À-ÿẞ\s.,-]+$/i|min:2|max:50',
+            'category_name_ru' => 'nullable|regex:/^[a-zа-я0-9À-ÿẞ\s.,-]+$/i|min:2|max:50',
         ];
     }
 }

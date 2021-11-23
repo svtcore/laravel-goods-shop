@@ -67,4 +67,26 @@ class Categories{
         Category::findOrFail($id)->products()->delete();
         Category::findOrFail($id)->delete();
     }
+
+    /**
+     * Getting all categories
+     * formation them to array only on user language
+     * for dislpay in <select> tag
+     * Return view with categories array
+     */
+
+    public function get_local($local){
+        $catg_array = array();
+        try{
+            $catg_name = "catg_name_".$local;
+            $catg = Category::all();
+            foreach($catg as $cat){
+                $catg_array[$cat->catg_id] = $cat->$catg_name;
+            }
+        }
+        catch(Exception $e){
+            //
+        }
+        return $catg_array;
+    }
 }

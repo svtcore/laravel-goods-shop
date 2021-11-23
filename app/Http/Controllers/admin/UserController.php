@@ -5,14 +5,17 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Order;
-use App\Http\Requests\UpdateUserRequest;
+use App\Classes\Users;
+use App\Http\Requests\admin\users\SearchRequest;
+use App\Http\Requests\admin\users\UpdateRequest;
+use Exception;
 
 class UserController extends Controller
 {
 
     public function __construct()
     {
+        $this->users = new Users();
         $this->middleware('auth:admin');
     }
     /**
@@ -20,20 +23,25 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
-        if (count($users) > 0)
-            return view('admin.users')->with('users', User::paginate(15));
-        else return view('admin.users')->with('users', null);
+        try{
+            if (count($this->users->getAll()) > 0)
+                return view('admin.users')->with('users', $this->users->getPaginated(15));
+            else return view('admin.users')->with('users', null);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+        
     }
 
     /**
      * Validate query data
      * Get rusults from query and return in json
      */
-    public function search(){
+    public function search(SearchRequest $request){
         try{
-            $query = preg_replace( '/^[a-zа-яÀ-ÿ0-9ẞ\s.#%№%()[]?!\/,-]+$/i', '', $_GET['query']);
-            $results = User::searchQuery($query);
+            $validated =  $request->validated();
+            $results = $this->users->search($validated['query']);
             return response()->json($results);
         }
         catch(Exception $e){
@@ -45,7 +53,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('admin.user_show')->with('user', User::getUserDataById($id));
+        try{
+            if (!empty($user = $this->users->getById($id)))
+                return view('admin.user_show')->with('user', $user);
+            else
+                return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -53,7 +69,15 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.user_edit')->with('user', User::getUserDataById($id));
+        try{
+            if (!empty($user = $this->users->getById($id)))
+                return view('admin.user_edit')->with('user', $user);
+            else
+                return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
 
@@ -61,31 +85,25 @@ class UserController extends Controller
      * Validate data through UpdateUserRequest
      * and formation request data to update
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         try{
-            if ($request->type == "edit_data"){ 
-                User::where('user_id', $id)->update(
-                    [
-                    'user_fname' => $request->f_name, 
-                    'user_lname' => $request->l_name,
-                    'user_phone' => $request->phone, 
-                    'email' => $request->email,
-                    ]);
+            if ($request->type == "edit_data"){
+                $validated = $request->validated();
+                $this->users->update($validated, $id);
                 return redirect()->route('admin.users');
             }
         }
         catch(Exception $e){
-            //
+            return 0;
         }
-        return redirect()->route('admin.users');
     }
     /**
      * Delete user
      */
     public function destroy($id)
     {
-        User::find($id)->forcedelete();
+        $this->users->delete($id);
         return redirect()->route('admin.users');
     }
 
@@ -94,6 +112,6 @@ class UserController extends Controller
      */
     public function orders($id){
 
-        return view('admin.user_orders')->with('users', User::getOrdersByUserId($id)->paginate(15));
+        return view('admin.user_orders')->with('users', $this->users->getOrdersByUserId($id)->paginate(15));
     }
 }

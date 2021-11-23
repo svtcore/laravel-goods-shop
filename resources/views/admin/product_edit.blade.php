@@ -11,7 +11,6 @@
     </tr>
   </thead>
   <tbody>
-    @foreach ($products as $product)
     <form action="{{ route('admin.product.update',['id' => $product->product_id]) }}" method="POST" enctype="multipart/form-data">
     @method('PUT')
     @csrf
@@ -203,7 +202,6 @@
             <button  class="btn btn-primary w-100" type="submit" >{{ __('admin_product_edit.update')}}</button>
         </td>
     </tr>
-    @endforeach
   </tbody>
 </table>
 </form>

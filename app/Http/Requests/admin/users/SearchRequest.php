@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\admin\users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentTypeRequest extends FormRequest
+class SearchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class PaymentTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'payment_name' => 'required|regex:/^[a-zа-я0-9À-ÿẞ\s."№,-]+$/i|min:2|max:50',
-            'payment_exst' => 'required|digits_between:0,1',
+            'query' => 'required|regex:/^[a-zа-я0-9À-ÿẞ\s.№%",-]+$/i|min:2|max:50',
         ];
     }
 }

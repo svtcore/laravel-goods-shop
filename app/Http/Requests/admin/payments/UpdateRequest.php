@@ -24,8 +24,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'payment_name' => '',
-            'payment_exst' => '',
+            'payment_name' => 'required|regex:/^[a-zа-я0-9À-ÿẞ\s."№,-]+$/i|min:2|max:50',
+            'payment_exst' => 'required|digits_between:0,1',
         ];
     }
 }
