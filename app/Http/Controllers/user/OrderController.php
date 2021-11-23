@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Cookie;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\user\orders\StoreRequest;
@@ -34,18 +33,24 @@ class OrderController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            $orders = $this->orders->getByUserId(Auth::id());
-            if (!empty($orders->get())) {
-                if (count($orders->get()) > 0)
-                    return view('user.orders')
-                        ->with('orders', $orders->paginate(15))
+        try{
+            if (Auth::check()) {
+                $orders = $this->orders->getByUserId(Auth::id());
+                if (!empty($orders->get())) {
+                    if (count($orders->get()) > 0)
+                        return view('user.orders.index')
+                            ->with('orders', $orders->paginate(15))
+                            ->with('categories', $this->categories->getAll());
+                    else return view('user.orders.index')
+                        ->with('orders', null)
                         ->with('categories', $this->categories->getAll());
-                else return view('user.orders')
-                    ->with('orders', null)
-                    ->with('categories', $this->categories->getAll());
-            }
-        } else return redirect()->route('login')->with('categories', $this->categories);
+                }
+            } else return redirect()->route('login')->with('categories', $this->categories->getAll());
+        }
+        catch(Exception $e){
+            return 0;
+        }
+        
     }
 
     /**
@@ -53,25 +58,31 @@ class OrderController extends Controller
      * Run function to formation cookies to array and create record
      * Return order data, payment type list and category list for nav bar
      */
-    public function create(Request $request)
+    public function create()
     {
-        if (isset($_COOKIE['user_cart'])) {
-            $cookies = $_COOKIE['user_cart'];
-            $data_arr = $this->orders->formatCookies($cookies);
-            if ($data_arr != null) {
-                return view('user.cart')
-                    ->with('order_products', $data_arr[1])
-                    ->with('total', $data_arr[0])
-                    ->with('payment', $this->payments->getAvaliable())
-                    ->with('categories', $this->categories->getAll());
+        try{
+            if (isset($_COOKIE['user_cart'])) {
+                $cookies = $_COOKIE['user_cart'];
+                $data_arr = $this->orders->formatCookies($cookies);
+                if ($data_arr != null) {
+                    return view('user.orders.cart')
+                        ->with('order_products', $data_arr[1])
+                        ->with('total', $data_arr[0])
+                        ->with('payment', $this->payments->getAvaliable())
+                        ->with('categories', $this->categories->getAll());
+                } else {
+                    return redirect()->route('user.orders.cart')->withCookie(Cookie::forget('user_cart'));
+                }
             } else {
-                return redirect()->route('user.order.cart')->withCookie(Cookie::forget('user_cart'));
+                return view('user.orders.cart')
+                        ->with('order_products', null)
+                        ->with('categories', $this->categories->getAll());
             }
-        } else {
-            return view('user.cart')
-                    ->with('order_products', null)
-                    ->with('categories', $this->categories->getAll());
         }
+        catch(Exception $e){
+            return 0;
+        }
+        
     }
 
     /**
@@ -98,14 +109,14 @@ class OrderController extends Controller
                         else $id = $user_data_arr[0];
                     }
                     $id = $this->orders->add($validated, $id, $order_array);
-                    return view('user.order_complete')
+                    return view('user.orders.finish')
                         ->with('order_id', $id)
                         ->with('password', $password)
                         ->with('categories', $this->categories->getAll());
-                } else return redirect()->route('user.order.cart');
+                } else return redirect()->route('user.orders.cart');
             }
         } catch (Exception $e) {
-            return redirect()->route('user.order.cart');
+            return redirect()->route('user.orders.cart');
         }
     }
 
@@ -129,9 +140,9 @@ class OrderController extends Controller
                     }
                 }
                 return $order_array;
-            } else return redirect()->route('user.cart');
+            } else return redirect()->route('user.orders.cart');
         } catch (Exception $e) {
-            return redirect()->route('user.cart');
+            return redirect()->route('user.orders.cart');
         }
     }
 }

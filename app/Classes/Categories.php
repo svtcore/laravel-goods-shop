@@ -2,65 +2,77 @@
 
 
 namespace App\Classes;
+
 use App\Models\Category;
 use Exception;
 
-class Categories{
-
-    public function getAll(){
+class Categories
+{
+    /**
+     * Getting all category records
+     * Output: Collection
+     */
+    public function getAll()
+    {
         return Category::all();
     }
 
-    public function getById($id){
-        return Category::where('catg_id', $id)->with('products','products.names', 'products.images', 'products.descriptions');
+    /**
+     * Input: category identificator
+     * Output: Collection of the categories
+     */
+    public function getById($id)
+    {
+        return Category::where('catg_id', $id)->with('products', 'products.names', 'products.images', 'products.descriptions');
     }
 
-    public function orderByLang($locale){
+    /**
+     * Input: filed name with lang tag
+     * Output: Collection of the categories
+     * Description: Return collection of categoris on the specific language
+     */
+
+    public function orderByLang($locale)
+    {
         return Category::orderBy($locale)->get();
     }
 
     /**
-     * Formation data to array and create record in db
-     * return 1 if success and 0 if fail
+     * Input: Validated request data
+     * Output: None
+     * Description: Formation data to array and create record in db
      */
-    public function add($request){
-        try{
-            $data = [
-                'catg_name_en' => $request['category_name_en'],
-                'catg_name_de' => $request['category_name_de'],
-                'catg_name_uk' => $request['category_name_uk'],
-                'catg_name_ru' => $request['category_name_ru']
-            ];
-            Category::create($data);
-            return 1;
-        }
-        catch(Exception $e){
-            return 0;
-        }
-    }
-
-     /**
-     * Formation data to array and update record in db
-     * return 1 if success and 0 if fail
-     */
-    public function update($request, $id)
+    public function add($request)
     {
-        try {
-            $data = [
-                'catg_name_en' => $request['category_name_en'],
-                'catg_name_de' => $request['category_name_de'],
-                'catg_name_uk' => $request['category_name_uk'],
-                'catg_name_ru' => $request['category_name_ru']
-            ];
-            Category::find($id)->update($data);
-            return 1;
-        } catch (Exception $e) {
-            return 0;
-        }
+        $data = [
+            'catg_name_en' => $request['category_name_en'],
+            'catg_name_de' => $request['category_name_de'],
+            'catg_name_uk' => $request['category_name_uk'],
+            'catg_name_ru' => $request['category_name_ru']
+        ];
+        Category::create($data);
     }
 
     /**
-     * Getting model category and delete record
+     * Input: Validated request data
+     * Output: None
+     * Formation data to array and update record in db
+     */
+    public function update($request, $id)
+    {
+        $data = [
+            'catg_name_en' => $request['category_name_en'],
+            'catg_name_de' => $request['category_name_de'],
+            'catg_name_uk' => $request['category_name_uk'],
+            'catg_name_ru' => $request['category_name_ru']
+        ];
+        Category::findOrFail($id)->update($data);
+    }
+
+    /**
+     * Input: category identificator
+     * Output: None
+     * Getting model category and category products then delete records
      */
     public function delete($id)
     {
@@ -69,23 +81,18 @@ class Categories{
     }
 
     /**
-     * Getting all categories
-     * formation them to array only on user language
+     * Input: language tag
+     * Output: categories array
+     * Description: Getting all categories formation them to array only on user language
      * for dislpay in <select> tag
-     * Return view with categories array
      */
-
-    public function get_local($local){
+    public function get_local($local)
+    {
         $catg_array = array();
-        try{
-            $catg_name = "catg_name_".$local;
-            $catg = Category::all();
-            foreach($catg as $cat){
-                $catg_array[$cat->catg_id] = $cat->$catg_name;
-            }
-        }
-        catch(Exception $e){
-            //
+        $catg_name = "catg_name_" . $local;
+        $catg = Category::all();
+        foreach ($catg as $cat) {
+            $catg_array[$cat->catg_id] = $cat->$catg_name;
         }
         return $catg_array;
     }

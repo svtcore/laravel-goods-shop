@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Classes\Users;
 use App\Http\Requests\admin\users\SearchRequest;
 use App\Http\Requests\admin\users\UpdateRequest;
@@ -25,11 +23,11 @@ class UserController extends Controller
     {
         try{
             if (count($this->users->getAll()) > 0)
-                return view('admin.users')->with('users', $this->users->getPaginated(15));
-            else return view('admin.users')->with('users', null);
+                return view('admin.users.index')->with('users', $this->users->getPaginated(15));
+            else return view('admin.users.index')->with('users', null);
         }
         catch(Exception $e){
-            return 0;
+            print($e);
         }
         
     }
@@ -55,7 +53,7 @@ class UserController extends Controller
     {
         try{
             if (!empty($user = $this->users->getById($id)))
-                return view('admin.user_show')->with('user', $user);
+                return view('admin.users.show')->with('user', $user);
             else
                 return abort(404);
         }
@@ -71,7 +69,7 @@ class UserController extends Controller
     {
         try{
             if (!empty($user = $this->users->getById($id)))
-                return view('admin.user_edit')->with('user', $user);
+                return view('admin.users.edit')->with('user', $user);
             else
                 return abort(404);
         }
@@ -91,7 +89,7 @@ class UserController extends Controller
             if ($request->type == "edit_data"){
                 $validated = $request->validated();
                 $this->users->update($validated, $id);
-                return redirect()->route('admin.users');
+                return redirect()->route('admin.users.index');
             }
         }
         catch(Exception $e){
@@ -103,8 +101,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->users->delete($id);
-        return redirect()->route('admin.users');
+        try{
+            $this->users->delete($id);
+            return redirect()->route('admin.users.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -112,6 +115,11 @@ class UserController extends Controller
      */
     public function orders($id){
 
-        return view('admin.user_orders')->with('users', $this->users->getOrdersByUserId($id)->paginate(15));
+        try{
+            return view('admin.users.orders')->with('users', $this->users->getOrdersByUserId($id)->paginate(15));
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 }

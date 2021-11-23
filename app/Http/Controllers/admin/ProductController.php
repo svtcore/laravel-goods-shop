@@ -4,8 +4,6 @@ namespace App\Http\Controllers\admin;
 
 use App\Classes\Categories;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Product;
 use App\Http\Requests\admin\products\StoreRequest;
 use App\Http\Requests\admin\products\UpdateRequest;
 use App\Http\Requests\admin\products\SearchRequest;
@@ -32,8 +30,8 @@ class ProductController extends Controller
     {
         try{
             if (count(($prod =  $this->products->getAll())->get()) > 0)
-                return view('admin.products')->with('products', $prod->paginate(15));
-            else return view('admin.products')->with('products', null);
+                return view('admin.products.index')->with('products', $prod->paginate(15));
+            else return view('admin.products.index')->with('products', null);
         }
         catch(Exception $e){
             return 0;
@@ -45,7 +43,7 @@ class ProductController extends Controller
     {
         try{    
             $local = app()->getLocale();
-            return view('admin.product_new')->with('catg', $this->categories->get_local($local));
+            return view('admin.products.create')->with('catg', $this->categories->get_local($local));
         }
         catch(Exception $e){
             return 0;
@@ -62,7 +60,7 @@ class ProductController extends Controller
             $validated = $request->validated();
             $filenames = $this->products->uploadfiles($validated, $request);
             $this->products->add($validated, $filenames);
-            return redirect()->route('admin.products');
+            return redirect()->route('admin.products.index');
         }
         catch(Exception $e){
             return 0;
@@ -78,7 +76,7 @@ class ProductController extends Controller
         try{
             $local = app()->getLocale();
             if (!empty($product = $this->products->getById($id)))
-                return view ('admin.product_edit')
+                return view ('admin.products.edit')
                                 ->with('product', $product)
                                 ->with('catg', $this->categories->get_local($local));
             else return abort(404);
@@ -98,7 +96,7 @@ class ProductController extends Controller
             $validated = $request->validated();
             $filenames = $this->products->uploadfiles($validated, $request);
             $this->products->update($request, $filenames, $id);
-            return redirect()->route('admin.products');
+            return redirect()->route('admin.products.index');
         }
         catch(Exception $e){
             return 0;
@@ -112,7 +110,7 @@ class ProductController extends Controller
     {
         try{
             $this->products->delete($id);
-            return redirect()->route('admin.products');
+            return redirect()->route('admin.products.index');
         }
         catch(Exception $e){
             return 0;

@@ -18,9 +18,9 @@
                                 <input id="admin_phone" type="text" class="form-control @error('admin_phone') is-invalid @enderror" name="admin_phone" value="{{ old('admin_phone') }}" required autocomplete="email" autofocus>
 
                                 @error('admin_phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -32,9 +32,9 @@
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                    {{ __('admin_login.remember') }}
+                                        {{ __('admin_login.remember') }}
                                     </label>
                                 </div>
                             </div>
@@ -58,9 +58,9 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('admin_login.forgot') }}
-                                    </a>
+                                </a>
                                 @endif
                             </div>
                         </div>

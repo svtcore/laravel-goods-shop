@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Manager;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Classes\Orders;
 use App\Classes\Payments;
 use App\Http\Requests\manager\orders\UpdateRequest;
@@ -27,9 +26,15 @@ class OrderController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            return view('manager.orders');
-        } else return redirect()->route('manager.login.page');
+        try{
+            if (Auth::check()) {
+                return view('manager.orders.index');
+            } else return redirect()->route('manager.login.page');
+        }
+        catch(Exception $e){
+            return 0;
+        }
+
     }
 
     /**
@@ -38,9 +43,15 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        if (!empty($order = $this->orders->getById($id)))
-            return view('manager.order_show')->with('order', $order);
+        try{
+            if (!empty($order = $this->orders->getById($id)))
+            return view('manager.orders.show')->with('order', $order);
         else return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+
     }
 
     /**
@@ -50,11 +61,17 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        if (!empty($order = $this->orders->getById($id))) {
-            return view('manager.order_edit')
-                ->with('order', $order)
-                ->with('payment', $this->payments->getAvaliable());
-        } else return abort(404);
+        try{
+            if (!empty($order = $this->orders->getById($id))) {
+                return view('manager.orders.edit')
+                    ->with('order', $order)
+                    ->with('payment', $this->payments->getAvaliable());
+            } else return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+
     }
 
     /**
@@ -91,16 +108,22 @@ class OrderController extends Controller
      */
     public function get_by_status($name)
     {
-        $statuses = array('created', 'processing', 'completed', 'canceled');
-        if (in_array($name, $statuses)) {
-            $orders = $this->orders->getByStatus($name)->paginate(15);
-            if (count($orders) != 0) {
-                return view('manager.orders')->with('orders', $orders);
-            } else {
-                $orders = null;
-                return view('manager.orders')->with('orders', $orders);
-            }
-        } else return abort(404);
+        try{
+            $statuses = array('created', 'processing', 'completed', 'canceled');
+            if (in_array($name, $statuses)) {
+                $orders = $this->orders->getByStatus($name)->paginate(15);
+                if (count($orders) != 0) {
+                    return view('manager.orders.index')->with('orders', $orders);
+                } else {
+                    $orders = null;
+                    return view('manager.orders.index')->with('orders', $orders);
+                }
+            } else return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+        
     }
 
     /**

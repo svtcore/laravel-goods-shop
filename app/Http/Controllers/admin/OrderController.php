@@ -26,7 +26,7 @@ class OrderController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            return view('admin.orders')->with('orders', $this->orders->getAll()->paginate(15));
+            return view('admin.orders.index')->with('orders', $this->orders->getAll()->paginate(15));
         } else return redirect()->route('admin.login.page');
     }
 
@@ -37,7 +37,7 @@ class OrderController extends Controller
     public function show($id)
     {
         if (!empty($order = $this->orders->getById($id)))
-            return view('admin.order_show')->with('order', $order);
+            return view('admin.orders.show')->with('order', $order);
         else return abort(404);
     }
 
@@ -49,7 +49,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         if (!empty($order = $this->orders->getById($id))) {
-            return view('admin.order_edit')
+            return view('admin.orders.edit')
                 ->with('order', $order)
                 ->with('payment', $this->payments->getAvaliable());
         } else return abort(404);
@@ -75,10 +75,10 @@ class OrderController extends Controller
                 } elseif ($validated['type'] == "edit_data") {
                     $this->orders->update($id, $request, NULL);
                 }
-                return redirect()->route('admin.orders.status', ['name' => 'created']);
+                return redirect()->route('admin.orders.index');
             }
         } catch (Exception $e) {
-            return redirect()->route('manager.login.page');
+            return redirect()->route('admin.login.page');
         }
     }
 
@@ -93,10 +93,10 @@ class OrderController extends Controller
         if (in_array($name, $statuses)) {
             $orders = $this->orders->getByStatus($name)->paginate(15);
             if (count($orders) != 0) {
-                return view('admin.orders')->with('orders', $orders);
+                return view('admin.orders.index')->with('orders', $orders);
             } else {
                 $orders = null;
-                return view('admin.orders')->with('orders', $orders);
+                return view('admin.orders.index')->with('orders', $orders);
             }
         } else return abort(404);
     }
@@ -114,5 +114,10 @@ class OrderController extends Controller
         } catch (Exception $e) {
             return 0;
         }
+    }
+
+    public function destroy($id){
+        $this->orders->delete($id);
+        return redirect()->route('admin.orders.index');
     }
 }

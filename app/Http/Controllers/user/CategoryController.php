@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Classes\Categories;
+use Exception;
 
 class CategoryController extends Controller
 {
@@ -19,15 +19,21 @@ class CategoryController extends Controller
     }
     
     /**
-     * Get products by categorie id
+     * Get products by category id
      */
     public function show($id)
     {
-        if (!empty($this->categories->getById($id))){
-        return view('user.category')
-            ->with('category_products', $this->categories->getById($id)->paginate(12))
-            ->with('categories', $this->categories->getAll());
-        }else abort(404);
+        try{
+            if (!empty($this->categories->getById($id))){
+                return view('user.categories.index')
+                    ->with('category_products', $this->categories->getById($id)->paginate(12))
+                    ->with('categories', $this->categories->getAll());
+                }else abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+
 
     }
 }

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Manager;
-use App\Http\Requests\ManagerRequest;
 use App\Http\Requests\admin\managers\StoreRequest;
 use App\Http\Requests\admin\managers\UpdateRequest;
 use Exception;
@@ -25,15 +22,24 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $managers = $this->managers->getAll()->get();
-        if (count($managers) > 0)
-            return view('admin.managers')->with('managers', $this->managers->getAll()->paginate(15));
-        else return view('admin.managers')->with('managers', null);
+        try{
+            if (count($this->managers->getAll()->get()) > 0)
+                return view('admin.managers.index')->with('managers', $this->managers->getAll()->paginate(15));
+            else return view('admin.managers.index')->with('managers', null);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     public function create()
     {
-        return view('admin.manager_new');
+        try{
+            return view('admin.managers.create');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -43,9 +49,14 @@ class ManagerController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $validated = $request->validated();
-        $this->managers->add($validated);
-        return redirect()->route('admin.managers');
+        try{
+            $validated = $request->validated();
+            $this->managers->add($validated);
+            return redirect()->route('admin.managers.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -53,9 +64,14 @@ class ManagerController extends Controller
      */
     public function edit($id)
     {
-        if (!empty($manager = $this->managers->getById($id)))
-            return view('admin.manager_edit')->with('manager', $manager);
-        else return abort(404);
+        try{
+            if (!empty($manager = $this->managers->getById($id)))
+                return view('admin.managers.edit')->with('manager', $manager);
+            else return abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -64,12 +80,17 @@ class ManagerController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        if ($request->type == "edit_data") {
-            $validated = $request->validated();
-            $this->managers->update($validated, $id);
-            return redirect()->route('admin.managers');
+        try{
+            if ($request->type == "edit_data") {
+                $validated = $request->validated();
+                $this->managers->update($validated, $id);
+                return redirect()->route('admin.managers.index');
+            }
+            return redirect()->back();
         }
-        return redirect()->back();
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -77,8 +98,13 @@ class ManagerController extends Controller
      */
     public function destroy($id)
     {
-        $this->managers->delete($id);
-        return redirect()->route('admin.managers');
+        try{
+            $this->managers->delete($id);
+            return redirect()->route('admin.managers.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -87,7 +113,12 @@ class ManagerController extends Controller
      */
     public function orders($id)
     {
-        $orders = $this->managers->getOrdersByManagerId($id)->paginate(15);
-        return view('admin.manager_orders')->with('managers', $orders);
+        try{
+            $orders = $this->managers->getOrdersByManagerId($id)->paginate(15);
+            return view('admin.manager_orders')->with('managers', $orders);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 }

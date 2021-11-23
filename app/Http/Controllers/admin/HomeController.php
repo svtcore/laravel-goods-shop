@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\admin;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Classes\Orders;
+use App\Classes\OrderProducts;
 use Exception;
 
 class HomeController extends Controller
@@ -15,6 +12,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->orders = new Orders();
+        $this->order_prod = new OrderProducts();
         $this->middleware('auth:admin');
     }
     /**
@@ -58,11 +56,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $orders = array_merge($today = $this->Orders(0), $_7 = $this->Orders(7), 
-        $_14 = $this->Orders(14), $_30 = $this->Orders(30), $_90 = $this->Orders(90), $_180 = $this->Orders(180));
+        $orders = array_merge($today = $this->orders(0), $_7 = $this->orders(7), 
+        $_14 = $this->orders(14), $_30 = $this->orders(30), $_90 = $this->orders(90), $_180 = $this->orders(180));
         
-        $incomes = array_merge($today = $this->Incomes(0), $_7 = $this->Incomes(7), 
-        $_14 = $this->Incomes(14), $_30 = $this->Incomes(30), $_90 = $this->Incomes(90), $_180 = $this->Incomes(180));
-        return view('admin.home')->with('orders', $orders)->with('incomes', $incomes)->with('prodcat', OrderProduct::PopularProductionAndCategories());
+        $incomes = array_merge($today = $this->incomes(0), $_7 = $this->incomes(7), 
+        $_14 = $this->incomes(14), $_30 = $this->incomes(30), $_90 = $this->incomes(90), $_180 = $this->incomes(180));
+        return view('admin.home')->with('orders', $orders)->with('incomes', $incomes)->with('prodcat', $this->order_prod->PopularProductionAndCategories());
     }
 }

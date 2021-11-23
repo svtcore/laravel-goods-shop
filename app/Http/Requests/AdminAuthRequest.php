@@ -14,7 +14,7 @@ class AdminAuthRequest extends FormRequest
     public function rules()
     {
         return [
-            'admin_phone'     => 'required|numeric|min:10',
+            'admin_phone' => 'required|numeric|min:10',
             'password'  => 'required|min:5'
         ];
     }

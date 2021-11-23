@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\user;
 
-use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Exception;
 use App\Classes\Categories;
@@ -40,7 +37,7 @@ class ProductController extends Controller
     public function show($id)
     {
         if (!empty($product = $this->products->getById($id)))
-            return view('user.product')
+            return view('user.products.index')
                 ->with('product_info', $product)
                 ->with('categories', $this->categories->getAll());
         else abort(404);

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\PaymentType;
 use App\Http\Requests\admin\payments\StoreRequest;
 use App\Http\Requests\admin\payments\UpdateRequest;
 use App\Classes\Payments;
@@ -25,13 +23,24 @@ class PaymentTypeController extends Controller
 
     public function index()
     {
-        $payments = $this->payments->getAll();
-        return view('admin.payments')->with('payments', $payments);
+        try{
+            $payments = $this->payments->getAll();
+            return view('admin.payments.index')->with('payments', $payments);
+        }
+        catch(Exception $e){
+            return 0;
+        }
+
     }
 
     public function create()
     {
-        return view('admin.payment_new');
+        try{
+            return view('admin.payments.create');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
     
     /**
@@ -40,9 +49,14 @@ class PaymentTypeController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $validated = $request->validated();
-        $this->payments->add($validated);
-        return redirect()->route('admin.payments');
+        try{
+            $validated = $request->validated();
+            $this->payments->add($validated);
+            return redirect()->route('admin.payments.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
     
     /**
@@ -51,9 +65,14 @@ class PaymentTypeController extends Controller
      */
     public function edit($id)
     {   
-        if (!empty($payment = $this->payments->getById($id)))
-            return view('admin.payment_edit')->with('payment', $payment);
-        else abort(404);
+        try{
+            if (!empty($payment = $this->payments->getById($id)))
+                return view('admin.payments.edit')->with('payment', $payment);
+            else abort(404);
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -62,9 +81,14 @@ class PaymentTypeController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $validated = $request->validated();
-        $this->payments->update($validated, $id);
-        return redirect()->route('admin.payments');
+        try{
+            $validated = $request->validated();
+            $this->payments->update($validated, $id);
+            return redirect()->route('admin.payments.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -72,8 +96,13 @@ class PaymentTypeController extends Controller
      */
     public function destroy($id)
     {
-        if (!empty($this->payments->getById($id)))
-            $this->payments->delete($id);
-        return redirect()->route('admin.payments');
+        try{
+            if (!empty($this->payments->getById($id)))
+                $this->payments->delete($id);
+            return redirect()->route('admin.payments.index');
+        }
+        catch(Exception $e){
+            return 0;
+        }
     }
 }

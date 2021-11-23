@@ -31,22 +31,18 @@ class OrderProduct extends Model
         return $this->belongsTo(Product::class, 'f_product_id');
     }
 
-    /*public static function getByOrderId($id){
-        return OrderProduct::where('f_order_id', $id)->withTrashed()->get();
-    }*/
-
-    public static function deleteByProductId($id){
+    public function deleteByProductId($id){
         return OrderProduct::where('f_product_id', $id)->delete();
     }
 
-    public static function getSumProductsByOrderId($id){
+    public function getSumProductsByOrderId($id){
         return OrderProduct::where('f_order_id', $id)->withTrashed()->sum('order_p_price');
     }
 
-    public static function updateCountPrice($id, $count, $price){
+    public function updateCountPrice($id, $count, $price){
         return OrderProduct::where('f_product_id', $id)->withTrashed()->update(['order_p_count' => $count, 'order_p_price' => $price]);
     }
-    public static function PopularProductionAndCategories(){
+    public function PopularProductionAndCategories(){
         return OrderProduct::select('f_product_id', DB::raw('count(order_p_count)'))->with('products', 'products.names', 'products.categories:catg_id,catg_name_en,catg_name_de,catg_name_uk,catg_name_ru')
         ->groupBy('f_product_id')->orderBy(DB::raw('count(order_p_count)'),'DESC')->take(5)->get();
     }

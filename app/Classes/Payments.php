@@ -4,59 +4,77 @@
 namespace App\Classes;
 
 use App\Models\PaymentType;
-use Exception;
 
 class Payments
 {
+    /**
+     * Input: None
+     * Output: array of payment type data
+     * Description: Getting avaliable payment types and convert data to array
+     */
     public function getAvaliable()
     {
-        try {
-            $payment = PaymentType::where('pay_t_exst', 1)->get();
-            $payment_array = array();
-            foreach ($payment as $pay) {
-                $payment_array[$pay->pay_t_id] = $pay->pay_t_name;
-            }
-            return $payment_array;
-        } catch (Exception $e) {
-            return array(null);
+        $payment = PaymentType::where('pay_t_exst', 1)->get();
+        $payment_array = array();
+        foreach ($payment as $pay) {
+            $payment_array[$pay->pay_t_id] = $pay->pay_t_name;
         }
+        return $payment_array;
     }
 
-    public function getById($id){
-        return PaymentType::where('pay_t_id',$id)->first();
+    /**
+     * Input: payment type id
+     * Output: collection of payment types
+     * Description: Getting payment type by id
+     */
+    public function getById($id)
+    {
+        return PaymentType::where('pay_t_id', $id)->first();
     }
 
+    /**
+     * Input: payment type id
+     * Output: array of payment type data
+     * Description: Getting all payment types
+     */
     public function getAll()
     {
         return PaymentType::orderBy('pay_t_name')->get();
     }
 
+    /**
+     * Input: validated request data
+     * Output: None
+     * Description: Add payment types data to db
+     */
     public function add($request)
     {
-        try {
-            PaymentType::create([
-                'pay_t_name' => $request['payment_name'],
-                'pay_t_exst' => $request['payment_exst']
-            ]);
-            return 1;
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'Failed to store payment data']);
-        }
+        PaymentType::create([
+            'pay_t_name' => $request['payment_name'],
+            'pay_t_exst' => $request['payment_exst']
+        ]);
     }
 
+    /**
+     * Input: validated request data, payment id
+     * Output: None
+     * Description: Update payment types data by id
+     */
     public function update($request, $id)
     {
-        try {
-            return PaymentType::find($id)->update([
-                'pay_t_name' => $request['payment_name'],
-                'pay_t_exst' => $request['payment_exst']
-            ]);
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'Failed to store payment data']);
-        }
+        PaymentType::findOrFail($id)->update([
+            'pay_t_name' => $request['payment_name'],
+            'pay_t_exst' => $request['payment_exst']
+        ]);
     }
 
-    public function delete($id){
-        return PaymentType::find($id)->delete();
+    /**
+     * Input: payment type id
+     * Output: None
+     * Description: Delete payment types data by id
+     */
+    public function delete($id)
+    {
+        PaymentType::findOrFail($id)->delete();
     }
 }
