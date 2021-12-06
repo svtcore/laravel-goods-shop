@@ -135,23 +135,23 @@
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
             @foreach($prodcat as $index => $val)
-            @if($val - > products != null)
-            @if(app() - > getLocale() == "en")['{{ $val->products->categories->catg_name_en }}', {
+            @if($val->products != null)
+            @if(app()->getLocale() == "en")['{{ $val->products->categories->catg_name_en }}', {
                 {
                     $prodcat[$index]['count(order_p_count)']
                 }
             }],
-            @elseif(app() - > getLocale() == "de")['{{ $val->products->categories->catg_name_de }}', {
+            @elseif(app()->getLocale() == "de")['{{ $val->products->categories->catg_name_de }}', {
                 {
                     $prodcat[$index]['count(order_p_count)']
                 }
             }],
-            @elseif(app() - > getLocale() == "uk")['{{ $val->products->categories->catg_name_uk }}', {
+            @elseif(app()->getLocale() == "uk")['{{ $val->products->categories->catg_name_uk }}', {
                 {
                     $prodcat[$index]['count(order_p_count)']
                 }
             }],
-            @elseif(app() - > getLocale() == "ru")['{{ $val->products->categories->catg_name_ru }}', {
+            @elseif(app()->getLocale() == "ru")['{{ $val->products->categories->catg_name_ru }}', {
                 {
                     $prodcat[$index]['count(order_p_count)']
                 }

@@ -61,7 +61,7 @@
         <div class="float-right">
           <select class="selectpicker show-menu-arrow" onchange="location = this.value;" data-width="fit">
             <option selected>{{ __('user_master.my_account') }}</option>
-            <option value="{{ route('user.orders') }}">{{ __('user_master.my_orders') }}</option>
+            <option value="{{ route('user.orders.index') }}">{{ __('user_master.my_orders') }}</option>
             <option value="{{ route('user.logout') }}">{{ __('user_master.logout') }}</option></a>
           </select>
         </div>

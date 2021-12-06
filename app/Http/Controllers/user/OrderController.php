@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
-use Cookie;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\user\orders\StoreRequest;
 use Exception;
@@ -11,6 +11,7 @@ use App\Classes\Categories;
 use App\Classes\Orders;
 use App\Classes\Payments;
 use App\Classes\Users;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {

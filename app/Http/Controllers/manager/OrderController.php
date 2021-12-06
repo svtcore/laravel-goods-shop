@@ -9,6 +9,7 @@ use App\Classes\Payments;
 use App\Http\Requests\manager\orders\UpdateRequest;
 use App\Http\Requests\manager\orders\SearchRequest;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {
@@ -44,12 +45,15 @@ class OrderController extends Controller
     public function show($id)
     {
         try{
-            if (!empty($order = $this->orders->getById($id)))
+            if ($order = $this->orders->getById($id))
             return view('manager.orders.show')->with('order', $order);
         else return abort(404);
         }
+        catch(NotFoundHttpException $e){
+            return abort(404);
+        }
         catch(Exception $e){
-            return 0;
+            return abort(400);
         }
 
     }
@@ -62,14 +66,17 @@ class OrderController extends Controller
     public function edit($id)
     {
         try{
-            if (!empty($order = $this->orders->getById($id))) {
+            if ($order = $this->orders->getById($id)) {
                 return view('manager.orders.edit')
                     ->with('order', $order)
                     ->with('payment', $this->payments->getAvaliable());
             } else return abort(404);
         }
+        catch(NotFoundHttpException $e){
+            return abort(404);
+        }
         catch(Exception $e){
-            return 0;
+            return abort(400);
         }
 
     }
@@ -121,7 +128,7 @@ class OrderController extends Controller
             } else return abort(404);
         }
         catch(Exception $e){
-            return 0;
+            return abort(400);
         }
         
     }
@@ -137,7 +144,7 @@ class OrderController extends Controller
             $results = $this->orders->search($validated['query']);
             return $results;
         } catch (Exception $e) {
-            return 0;
+            return abort(400);
         }
     }
 }

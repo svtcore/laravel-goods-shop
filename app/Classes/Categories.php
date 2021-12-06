@@ -3,27 +3,46 @@
 
 namespace App\Classes;
 
+use App\Http\Traits\ResultDataTrait;
 use App\Models\Category;
 use Exception;
 
 class Categories
 {
+    use ResultDataTrait;
     /**
      * Getting all category records
      * Output: Collection
      */
-    public function getAll()
+    public function getAll(): iterable
     {
-        return Category::all();
+        try {
+            $categories = Category::all();
+            if ($this->check_result($categories)) return $categories;
+            else return array();
+        } catch (Exception $e) {
+            return array();
+        }
     }
 
     /**
      * Input: category identificator
-     * Output: Collection of the categories
+     * Output: object of the categories
      */
-    public function getById($id)
+    public function getById(int $id): object|bool
     {
-        return Category::where('catg_id', $id)->with('products', 'products.names', 'products.images', 'products.descriptions');
+        try {
+            $category = Category::where('catg_id', $id)->with([
+                'products',
+                'products.names',
+                'products.images',
+                'products.descriptions'
+            ]);
+            if (isset($category)) return $category;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -32,41 +51,59 @@ class Categories
      * Description: Return collection of categoris on the specific language
      */
 
-    public function orderByLang($locale)
+    public function orderByLang(string $locale): iterable
     {
-        return Category::orderBy($locale)->get();
+        try {
+            $categories = Category::orderBy($locale)->get();
+            if ($this->check_result($categories)) return $categories;
+            else return array();
+        } catch (Exception $e) {
+            return array();
+        }
     }
 
     /**
      * Input: Validated request data
-     * Output: None
+     * Output: int or bool
      * Description: Formation data to array and create record in db
      */
-    public function add($request)
+    public function add(array $request): int|bool
     {
-        $data = [
-            'catg_name_en' => $request['category_name_en'],
-            'catg_name_de' => $request['category_name_de'],
-            'catg_name_uk' => $request['category_name_uk'],
-            'catg_name_ru' => $request['category_name_ru']
-        ];
-        Category::create($data);
+        try {
+            $data = [
+                'catg_name_en' => $request['category_name_en'],
+                'catg_name_de' => $request['category_name_de'],
+                'catg_name_uk' => $request['category_name_uk'],
+                'catg_name_ru' => $request['category_name_ru']
+            ];
+            $category = Category::create($data);
+            if (isset($category->catg_id)) return $category->catg_id;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
      * Input: Validated request data
-     * Output: None
+     * Output: bool
      * Formation data to array and update record in db
      */
-    public function update($request, $id)
+    public function update(array $request, int $id): bool
     {
-        $data = [
-            'catg_name_en' => $request['category_name_en'],
-            'catg_name_de' => $request['category_name_de'],
-            'catg_name_uk' => $request['category_name_uk'],
-            'catg_name_ru' => $request['category_name_ru']
-        ];
-        Category::findOrFail($id)->update($data);
+        try {
+            $data = [
+                'catg_name_en' => $request['category_name_en'],
+                'catg_name_de' => $request['category_name_de'],
+                'catg_name_uk' => $request['category_name_uk'],
+                'catg_name_ru' => $request['category_name_ru']
+            ];
+            $result = Category::findOrFail($id)->update($data);
+            if ($result) return true;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -74,10 +111,16 @@ class Categories
      * Output: None
      * Getting model category and category products then delete records
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
-        Category::findOrFail($id)->products()->delete();
-        Category::findOrFail($id)->delete();
+        try {
+            Category::findOrFail($id)->products()->delete();
+            $result = Category::findOrFail($id)->delete();
+            if ($result) return true;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -86,14 +129,18 @@ class Categories
      * Description: Getting all categories formation them to array only on user language
      * for dislpay in <select> tag
      */
-    public function get_local($local)
+    public function get_local(string $local): array
     {
-        $catg_array = array();
-        $catg_name = "catg_name_" . $local;
-        $catg = Category::all();
-        foreach ($catg as $cat) {
-            $catg_array[$cat->catg_id] = $cat->$catg_name;
+        try {
+            $catg_array = array();
+            $catg_name = "catg_name_" . $local;
+            $catg = Category::all();
+            foreach ($catg as $cat) {
+                $catg_array[$cat->catg_id] = $cat->$catg_name;
+            }
+            return $catg_array;
+        } catch (Exception $e) {
+            return array();
         }
-        return $catg_array;
     }
 }

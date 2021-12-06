@@ -2,28 +2,47 @@
 
 
 namespace App\Classes;
+
+use App\Http\Traits\ResultDataTrait;
 use App\Models\OrderProduct;
-use DB;
+use Composer\Command\ExecCommand;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
-class OrderProducts{
-
+class OrderProducts
+{
+    use ResultDataTrait;
     /**
      * Input: order identificator
      * Output: Collection of order products
      * Description: Getting products which were ordered include deleted;
      */
-    public function getByOrderId($id){
-        return OrderProduct::where('f_order_id', $id)->withTrashed()->get();
+    public function getByOrderId(int $id): object|bool
+    {
+        try {
+            $products = OrderProduct::where('f_order_id', $id)->withTrashed()->get();
+            if ($this->check_result($products)) return $products;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
-    
+
     /**
      * Input: product identificator, order identificator
      * Output: Collection result of deleted order products
      * Description: Deleted ordered products by id and order id;
      */
-    public function deleteByProductId($id, $order_id){
-        return OrderProduct::where('f_product_id', $id)
-                            ->where('f_order_id', $order_id)->delete();
+    public function deleteByProductId(int $id, int $order_id): bool
+    {
+        try {
+            $result = OrderProduct::where('f_product_id', $id)
+                ->where('f_order_id', $order_id)->delete();
+            if ($result) return true;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -31,8 +50,15 @@ class OrderProducts{
      * Output: Numeric value
      * Description: Getting sum of products which were ordered
      */
-    public function getSumByOrderId($id){
-        return OrderProduct::where('f_order_id', $id)->withTrashed()->sum('order_p_price');
+    public function getSumByOrderId(int $id): float|bool
+    {
+        try {
+            $sum = OrderProduct::where('f_order_id', $id)->withTrashed()->sum('order_p_price');
+            if ($sum >= 0) return $sum;
+            else return false;
+        } catch (Exception $e) {
+            return 0;
+        }
     }
 
     /**
@@ -40,8 +66,20 @@ class OrderProducts{
      * Output: Result of update
      * Description: Update amount of ordered products
      */
-    public function updateCountPrice($id, $count, $price){
-        return OrderProduct::where('f_product_id', $id)->withTrashed()->update(['order_p_count' => $count, 'order_p_price' => $price]);
+    public function updateCountPrice(int $id, int $count, float $price): bool
+    {
+        try {
+            $result = OrderProduct::where('f_product_id', $id)
+                ->withTrashed()
+                ->update([
+                    'order_p_count' => $count,
+                    'order_p_price' => $price
+                ]);
+            if ($result) return true;
+            else return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -49,9 +87,15 @@ class OrderProducts{
      * Output: Collection of Products
      * Description: Getting top 5 ordered products 
      */
-    public function PopularProductionAndCategories(){
-        return OrderProduct::select('f_product_id', DB::raw('count(order_p_count)'))->with('products', 'products.names', 'products.categories:catg_id,catg_name_en,catg_name_de,catg_name_uk,catg_name_ru')
-        ->groupBy('f_product_id')->orderBy(DB::raw('count(order_p_count)'),'DESC')->take(5)->get();
+    public function PopularProductionAndCategories(): iterable
+    {
+        try {
+            $result = OrderProduct::select('f_product_id', DB::raw('count(order_p_count)'))->with('products', 'products.names', 'products.categories:catg_id,catg_name_en,catg_name_de,catg_name_uk,catg_name_ru')
+                ->groupBy('f_product_id')->orderBy(DB::raw('count(order_p_count)'), 'DESC')->take(5)->get();
+            if ($this->check_result($result)) return $result;
+            else return array();
+        } catch (Exception $e) {
+            return array();
+        }
     }
-    
 }

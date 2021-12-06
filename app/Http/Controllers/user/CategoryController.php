@@ -5,6 +5,7 @@ namespace App\Http\Controllers\user;
 use App\Http\Controllers\Controller;
 use App\Classes\Categories;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends Controller
 {
@@ -30,8 +31,11 @@ class CategoryController extends Controller
                     ->with('categories', $this->categories->getAll());
                 }else abort(404);
         }
+        catch(NotFoundHttpException $e){
+            return abort(404);
+        }
         catch(Exception $e){
-            return 0;
+            print($e);
         }
 
 

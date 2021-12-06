@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\App;
 use Config;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 
 use Illuminate\Http\Request;
