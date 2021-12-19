@@ -11,9 +11,11 @@ class Payments
 {
     use ResultDataTrait;
     /**
-     * Input: None
-     * Output: array of payment type data
-     * Description: Getting avaliable payment types and convert data to array
+     * Getting avaliable payment types and convert data to array
+     * 
+     * @param null
+     * @return array
+     * 
      */
     public function getAvaliable(): iterable
     {
@@ -30,9 +32,11 @@ class Payments
     }
 
     /**
-     * Input: payment type id
-     * Output: collection of payment types
-     * Description: Getting payment type by id
+     * Getting payment type by id
+     * 
+     * @param int $id
+     * @return object or null
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -46,9 +50,11 @@ class Payments
     }
 
     /**
-     * Input: payment type id
-     * Output: array of payment type data
-     * Description: Getting all payment types
+     * Getting all payment types
+     * 
+     * @param null
+     * @return array
+     * 
      */
     public function getAll(): iterable
     {
@@ -62,9 +68,11 @@ class Payments
     }
 
     /**
-     * Input: validated request data
-     * Output: None
-     * Description: Add payment types data to db
+     * Add payment types data to db
+     * 
+     * @param array $request
+     * @return int or bool
+     * 
      */
     public function add(array $request): int|bool
     {
@@ -81,9 +89,11 @@ class Payments
     }
 
     /**
-     * Input: validated request data, payment id
-     * Output: None
-     * Description: Update payment types data by id
+     * Update payment types data by id
+     * 
+     * @param array $request, int $id
+     * @return bool
+     * 
      */
     public function update(array $request, int $id): bool
     {
@@ -100,9 +110,11 @@ class Payments
     }
 
     /**
-     * Input: payment type id
-     * Output: None
-     * Description: Delete payment types data by id
+     * Delete payment types data by id
+     * 
+     * @param int $id
+     * @return bool
+     * 
      */
     public function delete(int $id): bool
     {

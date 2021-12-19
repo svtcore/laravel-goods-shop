@@ -11,10 +11,12 @@ class Users
 {
     use ResultDataTrait;
     /**
-     * Input: validated request data
-     * Output: user id
-     * Description: Add user data, if user phone exist then return user id
+     * Add user data, if user phone exist then return user id
      * else cretae new user
+     * 
+     * @param array $request
+     * @return array
+     * 
      */
     public function add(array $request): iterable
     {
@@ -38,11 +40,13 @@ class Users
     }
 
     /**
-     * Input: validated request data, user id
-     * Output: user id
-     * Description: updated user data
+     * updated user data
+     * 
+     * @param array $request, int $id
+     * @return bool
+     *
      */
-    public function update(array $request, int $id)
+    public function update(array $request, int $id): bool
     {
         try {
             $result = User::where('user_id', $id)->update([
@@ -59,9 +63,11 @@ class Users
     }
 
     /**
-     * Input: None
-     * Output: string
-     * Description: Generate user password
+     * Generate user password
+     * 
+     * @param null
+     * @return string
+     * 
      */
     public function generateRandomPassword(): string
     {
@@ -74,9 +80,11 @@ class Users
     }
 
     /**
-     * Input: None
-     * Output: Collection
-     * Description: Getting all users
+     * Getting all users
+     * 
+     * @param null
+     * @return Collection
+     * 
      */
     public function getAll(): iterable
     {
@@ -90,9 +98,11 @@ class Users
     }
 
     /**
-     * Input: amount of records per page
-     * Output: Paginated collection
-     * Description: Getting all users
+     * Getting all users
+     * 
+     * @param int $amount
+     * @return Collectiion
+     * 
      */
     public function getPaginated(int $amount)
     {
@@ -104,9 +114,11 @@ class Users
     }
 
     /**
-     * Input: user phone
-     * Output: object or bool
-     * Description: Getting user by phone number
+     * Getting user by phone number
+     * 
+     * @param string $value
+     * @return object or bool
+     * 
      */
     public function getByPhone(string $value): object|bool
     {
@@ -120,9 +132,11 @@ class Users
     }
 
     /**
-     * Input: user id
-     * Output: object or bool
-     * Description: Getting user by user id
+     * Getting user by user id
+     * 
+     * @param int $id
+     * @return object or bool
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -136,9 +150,11 @@ class Users
     }
 
     /**
-     * Input: query 
-     * Output: collection of search result
-     * Description: Getting first 5 result of search query
+     * Getting first 5 result of search query
+     * 
+     * @param string $query 
+     * @return Collection
+     * 
      */
     public function search(string $query): iterable
     {
@@ -157,9 +173,11 @@ class Users
     }
 
     /**
-     * Input: user id 
-     * Output: collection orders
-     * Description: Getting user orders by user id
+     * Getting user orders by user id
+     * 
+     * @param int $id
+     * @return Collection
+     * 
      */
     public function getOrdersByUserId($id): object|iterable
     {
@@ -190,9 +208,11 @@ class Users
     }
 
     /**
-     * Input: user id 
-     * Output: collection orders
-     * Description: Delete user data
+     * Delete user data
+     * 
+     * @param int $id
+     * @return Collection
+     * 
      */
     public function delete(int $id): bool
     {

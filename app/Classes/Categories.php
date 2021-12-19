@@ -12,7 +12,9 @@ class Categories
     use ResultDataTrait;
     /**
      * Getting all category records
-     * Output: Collection
+     * 
+     * @param null
+     * @return Collection
      */
     public function getAll(): iterable
     {
@@ -26,8 +28,11 @@ class Categories
     }
 
     /**
-     * Input: category identificator
-     * Output: object of the categories
+     * Getting category data by id
+     * 
+     * @param int $id
+     * @return object or bool
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -46,9 +51,11 @@ class Categories
     }
 
     /**
-     * Input: filed name with lang tag
-     * Output: Collection of the categories
-     * Description: Return collection of categoris on the specific language
+     * Getting categories on the specific language
+     * 
+     * @param string $locale
+     * @return Collection
+     * 
      */
 
     public function orderByLang(string $locale): iterable
@@ -63,9 +70,11 @@ class Categories
     }
 
     /**
-     * Input: Validated request data
-     * Output: int or bool
-     * Description: Formation data to array and create record in db
+     * Formation data to array and create record in db
+     * 
+     * @param array $validated
+     * @return int or bool
+     * 
      */
     public function add(array $request): int|bool
     {
@@ -85,9 +94,11 @@ class Categories
     }
 
     /**
-     * Input: Validated request data
-     * Output: bool
      * Formation data to array and update record in db
+     * 
+     * @param array $request, int $id
+     * @return bool
+     * 
      */
     public function update(array $request, int $id): bool
     {
@@ -107,9 +118,11 @@ class Categories
     }
 
     /**
-     * Input: category identificator
-     * Output: None
      * Getting model category and category products then delete records
+     * 
+     * @param int $id
+     * @return bool
+     * 
      */
     public function delete(int $id): bool
     {
@@ -124,10 +137,12 @@ class Categories
     }
 
     /**
-     * Input: language tag
-     * Output: categories array
-     * Description: Getting all categories formation them to array only on user language
+     * Getting all categories formation them to array only on user language
      * for dislpay in <select> tag
+     * 
+     * @param string $local
+     * @return array
+     * 
      */
     public function get_local(string $local): array
     {

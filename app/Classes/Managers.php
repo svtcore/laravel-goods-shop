@@ -12,7 +12,9 @@ class Managers
     use ResultDataTrait;
     /**
      * Getting all managers with count of orders
-     * Output: Collection
+     * 
+     * @param null
+     * @return Collection
      */
 
     public function getAll(): object
@@ -27,9 +29,11 @@ class Managers
     }
 
     /**
-     * Input: Validated request data
-     * Output: bool
      * Formation data to array and create record in db
+     * 
+     * @param array $validated
+     * @return int or bool
+     * 
      */
     public function add(array $request): int|bool
     {
@@ -51,9 +55,11 @@ class Managers
     }
 
     /**
-     * Input: Validated request data
-     * Output: bool
      * Formation data to array and update record in db
+     * 
+     * @param array $request, int $id
+     * @return bool
+     * 
      */
     public function update(array $request, int $id): bool
     {
@@ -75,8 +81,11 @@ class Managers
     }
 
     /**
-     * Input: manager identificator
-     * Output: object of the manager data
+     * Getting manager data by id
+     * 
+     * @param int $id
+     * @return object
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -90,8 +99,11 @@ class Managers
     }
 
     /**
-     * Input: manager identificator
-     * Output: None
+     * Delete manager data
+     * 
+     * @param int $id
+     * @return bool
+     *
      */
     public function delete(int $id): bool
     {
@@ -105,9 +117,11 @@ class Managers
     }
 
     /**
-     * Input: manager identificator
-     * Output: Collection of managers with orders data
-     * Description: Getting orders which was claimed each manager
+     * Getting orders which was claimed each manager
+     * 
+     * @param int $id
+     * @return Collection
+     * 
      */
     public function getOrdersByManagerId(int $id): object|bool
     {

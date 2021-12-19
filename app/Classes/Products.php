@@ -13,9 +13,11 @@ class Products
 {
     use ResultDataTrait;
     /**
-     * Input: product id
-     * Output: collection of product
-     * Description: Getting product by id
+     * Getting product by id
+     * 
+     * @param int 
+     * @return object or bool
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -34,9 +36,11 @@ class Products
     }
 
     /**
-     * Input: product id
-     * Output: Numeric
-     * Description: Getting price by product id
+     * Getting price by product id
+     * 
+     * @param int $id
+     * @return object or bool
+     * 
      */
     public function getPrice(int $id): object|bool
     {
@@ -50,9 +54,11 @@ class Products
     }
 
     /**
-     * Input: count of records
-     * Output: Collection
-     * Description: Getting N random products
+     * Getting N random products
+     * 
+     * @param int $count
+     * @return array
+     * 
      */
     public function getRandom(int $count): iterable
     {
@@ -66,9 +72,11 @@ class Products
     }
 
     /**
-     * Input: None
-     * Output: Collection
-     * Description: Getting all users
+     * Getting all users
+     * 
+     * @param null
+     * @return Collection
+     * 
      */
     public function getAll(): object|iterable
     {
@@ -82,9 +90,11 @@ class Products
     }
 
     /**
-     * Input: query 
-     * Output: collection of search result
-     * Description: Getting first 5 result of search query
+     * Getting first 5 result of search query
+     * 
+     * @param string $query 
+     * @return Collection
+     * 
      */
     public function search(string $query): iterable
     {
@@ -104,9 +114,6 @@ class Products
     }
 
     /**
-     * Input: validated request, not validate request 
-     * Output: collection of search result
-     * Description:
      * Using for create new product
      * Upload files to server and formation array
      * with filenames
@@ -115,6 +122,10 @@ class Products
      * 0 = set null (no image)
      * -1 = dont do nothing
      * Return array with filenames to create records with uploaded images
+     * 
+     * @param array $validated, object $request
+     * @return Collection
+     * 
      */
     public function uploadfiles(array $validated, object $request): iterable
     {
@@ -138,9 +149,11 @@ class Products
     }
 
     /**
-     * Input: validated request data, array of filenames
-     * Output: int or bool
-     * Description: Adding product data, images, filenames
+     * Adding product data, images, filenames
+     * 
+     * @param array $validated, array $filenames
+     * @return int or bool
+     * 
      */
     public function add(array $validated, array $filenames): int|bool
     {
@@ -175,11 +188,13 @@ class Products
     }
 
     /**
-     * Input: validated request data, array of filenames, product id
-     * Output: bool
-     * Description: Update product data, images, filenames
+     * Update product data, images, filenames
+     * 
+     * @param array $validated, array $filenames, int $id
+     * @return bool
+     * 
      */
-    public function update(object $validated, array $filenames, int $id): bool
+    public function update(array $validated, array $filenames, int $id): bool
     {
         try {
             $product = Product::findOrFail($id)->update([
@@ -238,9 +253,11 @@ class Products
     }
 
     /**
-     * Input: product id
-     * Output: bool
-     * Description: Delete product images by data by product id
+     * Delete product images by data by product id
+     * 
+     * @param int $id
+     * @return bool
+     * 
      */
     public function delete(int $id): bool
     {

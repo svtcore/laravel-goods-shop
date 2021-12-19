@@ -12,9 +12,11 @@ class Orders
 {
     use ResultDataTrait;
     /**
-     * Input: user identificator
-     * Output: Collection of order
-     * Description: Getting full data of orders which were created by specific user
+     * Getting full data of orders which were created by specific user
+     * 
+     * @param int $id
+     * @return Collection
+     * 
      */
     public function getByUserId(int $id): object
     {
@@ -45,9 +47,11 @@ class Orders
     }
 
     /**
-     * Input: validated request data, user_id, products array
-     * Output: order id
-     * Description: Adding order data, user address and ordered products, calculate and update total price
+     * Adding order data, user address and ordered products, calculate and update total price
+     * 
+     * @param array $request, int $id, object $order_array
+     * @return int or bool
+     * 
      */
     public function add(array $request, int $id, object $order_array): int|bool
     {
@@ -90,9 +94,11 @@ class Orders
     }
 
     /**
-     * Input: order id, validated request data, manager id
-     * Output: bool
-     * Description: Update order data, user address and ordered products, calculate and update total price
+     * Update order data, user address and ordered products, calculate and update total price
+     * 
+     * @param int $id, object $request, int $manager
+     * @return bool
+     * 
      */
     public function update(int $id, object $request, ?int $manager): bool
     {
@@ -148,9 +154,11 @@ class Orders
     }
 
     /**
-     * Input: json cookies
-     * Output: array with order data
-     * Description: Getting and convert cookies to array when get cart page
+     * Getting and convert cookies to array when get cart page
+     * 
+     * @param string $cookies
+     * @return array
+     * 
      */
     public function formatCookies(string $cookies): iterable
     {
@@ -183,11 +191,13 @@ class Orders
         }
     }
 
-    /*
-     * Input: order id
-     * Output: array with validation rules
-     * Description: Generate validate rules data through method because some of orders have unknown id
+    /**
+     * Generate validate rules data through method because some of orders have unknown id
      * so request validate form doesnt correct for this task
+     * 
+     * @param int $id
+     * @return array
+     * 
      */
     public function validate_rules(int $id): iterable
     {
@@ -215,9 +225,11 @@ class Orders
     }
 
     /**
-     * Input: product data
-     * Output: name of product
-     * Description: formation product name by user language
+     * formation product name by user language
+     * 
+     * @param object $data
+     * @return string
+     * 
      */
     public function getCurrentProductLangName(object $data): string
     {
@@ -235,9 +247,11 @@ class Orders
     }
 
     /**
-     * Input: order status
-     * Output: collection of orders
-     * Description: Getting collection of orders by status
+     * Getting collection of orders by status
+     * 
+     * @param string $status
+     * @return object or bool
+     * 
      */
     public function getByStatus(string $status): object|bool
     {
@@ -261,9 +275,11 @@ class Orders
     }
 
     /**
-     * Input: None
-     * Output: collection of orders
-     * Description: Getting collection of orders
+     * Getting all orders data
+     * 
+     * @param null
+     * @return object
+     * 
      */
     public function getAll(): ?object
     {
@@ -286,11 +302,13 @@ class Orders
     }
 
     /**
-     * Input: order id, status, manager id
-     * Output: result of update
-     * Description: Update order status
+     * Update order status
+     * 
+     * @param int $id, string $status, int $manager
+     * @return bool
+     * 
      */
-    public function updateStatus(int $id, string $status, ?int $manager)
+    public function updateStatus(int $id, string $status, ?int $manager): bool
     {
         try {
             $result = Order::where('order_id', $id)->update([
@@ -305,9 +323,11 @@ class Orders
     }
 
     /**
-     * Input: order id
-     * Output: object of order data
-     * Description: Getting data of order by id
+     * Getting data of order by id
+     * 
+     * @param int $id
+     * @return object or bool
+     * 
      */
     public function getById(int $id): object|bool
     {
@@ -341,9 +361,11 @@ class Orders
     }
 
     /**
-     * Input: query 
-     * Output: collection of search result
-     * Description: Getting first 5 result of search query
+     * Getting first 5 result of search query
+     * 
+     * @param string $query 
+     * @return Collection
+     * 
      */
     public function search(string $query): iterable
     {
@@ -374,9 +396,11 @@ class Orders
     }
 
     /**
-     * Input: status, start date, end date 
-     * Output: Numeric
-     * Description: Getting count of orders by range of dates
+     * Getting count of orders by range of dates
+     * 
+     * @param string $status, string $from, string $to 
+     * @return int
+     * 
      */
     public function getDayCount(string $status, string $from, string $to): int
     {
@@ -390,9 +414,11 @@ class Orders
     }
 
     /**
-     * Input: start date, end date 
-     * Output: Numeric
-     * Description: Getting sum of orders by range of dates
+     * Getting sum of orders by range of dates
+     * 
+     * @param string $from, string $to 
+     * @return float
+     * 
      */
     public function getMoneyData(string $from, string $to): float
     {
@@ -406,9 +432,11 @@ class Orders
     }
 
     /**
-     * Input: order id
-     * Output: None
-     * Description: Delete order products and order by id
+     * Delete order products and order by id
+     * 
+     * @param int $id
+     * @return bool
+     * 
      */
     public function delete(int $id): bool
     {

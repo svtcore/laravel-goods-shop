@@ -13,9 +13,11 @@ class OrderProducts
 {
     use ResultDataTrait;
     /**
-     * Input: order identificator
-     * Output: Collection of order products
-     * Description: Getting products which were ordered include deleted;
+     * Getting products which were ordered include deleted
+     * 
+     * @param int $id
+     * @return Collection
+     * 
      */
     public function getByOrderId(int $id): object|bool
     {
@@ -29,9 +31,11 @@ class OrderProducts
     }
 
     /**
-     * Input: product identificator, order identificator
-     * Output: Collection result of deleted order products
-     * Description: Deleted ordered products by id and order id;
+     * Deleted ordered products by id and order id
+     * 
+     * @param int $id, int $order_id
+     * @return Collection
+     * 
      */
     public function deleteByProductId(int $id, int $order_id): bool
     {
@@ -46,9 +50,11 @@ class OrderProducts
     }
 
     /**
-     * Input: order identificator
-     * Output: Numeric value
-     * Description: Getting sum of products which were ordered
+     * Getting sum of products which were ordered
+     * 
+     * @param int $id
+     * @return int or bool
+     * 
      */
     public function getSumByOrderId(int $id): float|bool
     {
@@ -62,9 +68,11 @@ class OrderProducts
     }
 
     /**
-     * Input: order identificator, count of product, price
-     * Output: Result of update
-     * Description: Update amount of ordered products
+     * Update amount of ordered products
+     * 
+     * @param int $id, int $count, int $price
+     * @return bool
+     * 
      */
     public function updateCountPrice(int $id, int $count, float $price): bool
     {
@@ -83,9 +91,11 @@ class OrderProducts
     }
 
     /**
-     * Input: None
-     * Output: Collection of Products
-     * Description: Getting top 5 ordered products 
+     * Getting top 5 ordered products
+     * 
+     * @param null
+     * @return Collection
+     *  
      */
     public function PopularProductionAndCategories(): iterable
     {
