@@ -31,7 +31,7 @@ class Categories
      * Getting category data by id
      * 
      * @param int $id
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getById(int $id): object|bool
@@ -73,7 +73,7 @@ class Categories
      * Formation data to array and create record in db
      * 
      * @param array $validated
-     * @return int or bool
+     * @return int|bool
      * 
      */
     public function add(array $request): int|bool
@@ -96,7 +96,8 @@ class Categories
     /**
      * Formation data to array and update record in db
      * 
-     * @param array $request, int $id
+     * @param array $request
+     * @param int $id
      * @return bool
      * 
      */

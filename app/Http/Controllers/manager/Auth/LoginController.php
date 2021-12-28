@@ -27,6 +27,11 @@ class LoginController extends Controller
         return "manager_phone";
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(){
         if (Auth::guard('manager')->check()){
             return redirect()->route('manager.orders.status', ['name' => 'created']);

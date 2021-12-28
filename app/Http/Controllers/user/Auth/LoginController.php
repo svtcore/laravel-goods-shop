@@ -22,7 +22,12 @@ class LoginController extends Controller
     public function username(){
         return "user_phone";
     }
-
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(){
         $this->categories = new Categories();
         return view('user.auth.login')

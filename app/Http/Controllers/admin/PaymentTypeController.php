@@ -21,6 +21,11 @@ class PaymentTypeController extends Controller
         $this->payments = new Payments();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         try{
@@ -33,6 +38,11 @@ class PaymentTypeController extends Controller
 
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         try{
@@ -44,8 +54,10 @@ class PaymentTypeController extends Controller
     }
     
     /**
-     * Validate data through Requests\PaymentTypeRequest
-     * format data to array and add to db
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Http\Requests\admin\payments\StoreRequest  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
     {
@@ -60,8 +72,10 @@ class PaymentTypeController extends Controller
     }
     
     /**
-     * Getting payment data by id
-     * Return view with output data
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {   
@@ -76,8 +90,11 @@ class PaymentTypeController extends Controller
     }
 
     /**
-     * Validate data through Requests\PaymentTypeRequest
-     * format data to array and add to db
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\admin\payments\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {
@@ -92,7 +109,10 @@ class PaymentTypeController extends Controller
     }
 
     /**
-     * Deleting payment method
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

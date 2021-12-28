@@ -20,7 +20,10 @@ class CategoryController extends Controller
     }
     
     /**
-     * Get products by category id
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {

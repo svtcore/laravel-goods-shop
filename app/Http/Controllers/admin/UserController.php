@@ -16,8 +16,11 @@ class UserController extends Controller
         $this->users = new Users();
         $this->middleware('auth:admin');
     }
+    
     /**
-     * Get all users
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -46,8 +49,12 @@ class UserController extends Controller
             return 0;
         }
     }
+
     /**
-     * Get data by user id and return it to view
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -63,7 +70,10 @@ class UserController extends Controller
     }
 
     /**
-     * Get data by user id and return it to edit view
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -80,8 +90,11 @@ class UserController extends Controller
 
 
     /**
-     * Validate data through UpdateUserRequest
-     * and formation request data to update
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\admin\users\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {
@@ -96,8 +109,12 @@ class UserController extends Controller
             return 0;
         }
     }
+
     /**
-     * Delete user
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

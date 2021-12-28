@@ -27,8 +27,9 @@ class LoginController extends Controller
     }
     
     /**
-     * if authorized user go to auth page
-     * then redirect to home
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index(){
         if (Auth::guard('admin')->check()){

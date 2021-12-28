@@ -20,9 +20,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Home page
-     * Get 8 randoms products
-     * return them to view
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -32,7 +32,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Get product by id and return data to view
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {

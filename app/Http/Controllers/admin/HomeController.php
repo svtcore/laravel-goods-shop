@@ -52,7 +52,10 @@ class HomeController extends Controller
     }
     
     /**
+     * Display a listing of the resource.
      * unite all array from 7, 14, 30, 90 days and return to view
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {

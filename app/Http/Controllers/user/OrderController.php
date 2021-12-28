@@ -28,9 +28,11 @@ class OrderController extends Controller
         $this->payments = new Payments();
         $this->users = new Users();
     }
+    
     /**
-     * Get user orders
-     * if not authorized redirect to login page
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -55,9 +57,12 @@ class OrderController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
      * Check if exist cookies with order list
      * Run function to formation cookies to array and create record
      * Return order data, payment type list and category list for nav bar
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -87,10 +92,13 @@ class OrderController extends Controller
     }
 
     /**
-     * Validate date through Request\StoreOrderRequest
+     * Store a newly created resource in storage.
      * Formation order cookies to order array
      * Check if user authorized then link this order to exist user
      * else just add order and create new user
+     *
+     * @param  App\Http\Requests\user\orders\StoreRequest  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
     {

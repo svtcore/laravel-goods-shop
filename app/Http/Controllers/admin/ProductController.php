@@ -23,8 +23,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Getting product list
-     * return view with recived data
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -38,7 +39,11 @@ class ProductController extends Controller
         }
     }
     
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         try{    
@@ -51,8 +56,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Validate data and call function to formation and
-     * update data
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Http\Requests\admin\products\StoreRequest  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
     {
@@ -68,8 +75,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Getting data by product id
-     * and call function to formation categories on user language
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -87,15 +96,18 @@ class ProductController extends Controller
     }
 
     /**
-     * Validate data through Request\ProductRequest
-     * and call function to update data
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\admin\products\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {
         try{
             $validated = $request->validated();
             $filenames = $this->products->uploadfiles($validated, $request);
-            $this->products->update($request, $filenames, $id);
+            $this->products->update($validated, $filenames, $id);
             return redirect()->route('admin.products.index');
         }
         catch(Exception $e){
@@ -104,7 +116,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Delete record
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

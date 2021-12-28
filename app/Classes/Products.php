@@ -16,7 +16,7 @@ class Products
      * Getting product by id
      * 
      * @param int 
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getById(int $id): object|bool
@@ -39,7 +39,7 @@ class Products
      * Getting price by product id
      * 
      * @param int $id
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getPrice(int $id): object|bool
@@ -123,11 +123,12 @@ class Products
      * -1 = dont do nothing
      * Return array with filenames to create records with uploaded images
      * 
-     * @param array $validated, object $request
-     * @return Collection
+     * @param array $validated
+     * @param object $request
+     * @return array
      * 
      */
-    public function uploadfiles(array $validated, object $request): iterable
+    public function uploadfiles(array $validated, object $request): array
     {
         try {
             $filenames = array();
@@ -151,8 +152,9 @@ class Products
     /**
      * Adding product data, images, filenames
      * 
-     * @param array $validated, array $filenames
-     * @return int or bool
+     * @param array $validated
+     * @param array $filenames
+     * @return int|bool
      * 
      */
     public function add(array $validated, array $filenames): int|bool
@@ -190,7 +192,9 @@ class Products
     /**
      * Update product data, images, filenames
      * 
-     * @param array $validated, array $filenames, int $id
+     * @param array $validated
+     * @param array $filenames
+     * @param int $id
      * @return bool
      * 
      */

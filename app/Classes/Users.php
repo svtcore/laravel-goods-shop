@@ -42,7 +42,8 @@ class Users
     /**
      * updated user data
      * 
-     * @param array $request, int $id
+     * @param array $request
+     * @param int $id
      * @return bool
      *
      */
@@ -117,7 +118,7 @@ class Users
      * Getting user by phone number
      * 
      * @param string $value
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getByPhone(string $value): object|bool
@@ -135,7 +136,7 @@ class Users
      * Getting user by user id
      * 
      * @param int $id
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getById(int $id): object|bool

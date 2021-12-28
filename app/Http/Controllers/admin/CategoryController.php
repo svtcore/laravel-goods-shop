@@ -18,7 +18,10 @@ class CategoryController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
      * Get locale and sort categories by current language
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -34,7 +37,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * Return view adding category page
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -47,9 +52,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * Validate request data by StoreRequest
-     * run function to formate validate data
-     * Returns redirect to categories page or back page with error
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Http\Requests\admin\categories\StoreRequest  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
     {
@@ -67,7 +73,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * Return view edit category page and variable with data
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -82,7 +91,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * Validate data through UpdateRequest and update data
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\admin\categories\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {
@@ -99,7 +112,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * Getting model category and delete record
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

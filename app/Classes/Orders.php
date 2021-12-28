@@ -15,7 +15,7 @@ class Orders
      * Getting full data of orders which were created by specific user
      * 
      * @param int $id
-     * @return Collection
+     * @return object
      * 
      */
     public function getByUserId(int $id): object
@@ -49,8 +49,10 @@ class Orders
     /**
      * Adding order data, user address and ordered products, calculate and update total price
      * 
-     * @param array $request, int $id, object $order_array
-     * @return int or bool
+     * @param array $request
+     * @param int $id
+     * @param object $order_array
+     * @return int|bool
      * 
      */
     public function add(array $request, int $id, object $order_array): int|bool
@@ -96,7 +98,9 @@ class Orders
     /**
      * Update order data, user address and ordered products, calculate and update total price
      * 
-     * @param int $id, object $request, int $manager
+     * @param int $id
+     * @param object $request
+     * @param int $manager
      * @return bool
      * 
      */
@@ -250,7 +254,7 @@ class Orders
      * Getting collection of orders by status
      * 
      * @param string $status
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getByStatus(string $status): object|bool
@@ -278,7 +282,7 @@ class Orders
      * Getting all orders data
      * 
      * @param null
-     * @return object
+     * @return object|null
      * 
      */
     public function getAll(): ?object
@@ -304,7 +308,9 @@ class Orders
     /**
      * Update order status
      * 
-     * @param int $id, string $status, int $manager
+     * @param int $id
+     * @param string $status
+     * @param int $manager
      * @return bool
      * 
      */
@@ -326,7 +332,7 @@ class Orders
      * Getting data of order by id
      * 
      * @param int $id
-     * @return object or bool
+     * @return object|bool
      * 
      */
     public function getById(int $id): object|bool
@@ -398,7 +404,9 @@ class Orders
     /**
      * Getting count of orders by range of dates
      * 
-     * @param string $status, string $from, string $to 
+     * @param string $status
+     * @param string $from date start
+     * @param string $to date end
      * @return int
      * 
      */
@@ -416,7 +424,8 @@ class Orders
     /**
      * Getting sum of orders by range of dates
      * 
-     * @param string $from, string $to 
+     * @param string $from date start
+     * @param string $to date end
      * @return float
      * 
      */

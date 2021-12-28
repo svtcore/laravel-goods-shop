@@ -16,7 +16,7 @@ class OrderProducts
      * Getting products which were ordered include deleted
      * 
      * @param int $id
-     * @return Collection
+     * @return object|bool
      * 
      */
     public function getByOrderId(int $id): object|bool
@@ -33,8 +33,9 @@ class OrderProducts
     /**
      * Deleted ordered products by id and order id
      * 
-     * @param int $id, int $order_id
-     * @return Collection
+     * @param int $id
+     * @param int $order_id
+     * @return bool
      * 
      */
     public function deleteByProductId(int $id, int $order_id): bool
@@ -53,7 +54,7 @@ class OrderProducts
      * Getting sum of products which were ordered
      * 
      * @param int $id
-     * @return int or bool
+     * @return float|bool
      * 
      */
     public function getSumByOrderId(int $id): float|bool
@@ -70,7 +71,9 @@ class OrderProducts
     /**
      * Update amount of ordered products
      * 
-     * @param int $id, int $count, int $price
+     * @param int $id
+     * @param int $count
+     * @param int $price
      * @return bool
      * 
      */

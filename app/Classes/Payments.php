@@ -35,7 +35,7 @@ class Payments
      * Getting payment type by id
      * 
      * @param int $id
-     * @return object or null
+     * @return object|bool
      * 
      */
     public function getById(int $id): object|bool
@@ -71,7 +71,7 @@ class Payments
      * Add payment types data to db
      * 
      * @param array $request
-     * @return int or bool
+     * @return int|bool
      * 
      */
     public function add(array $request): int|bool
@@ -91,7 +91,8 @@ class Payments
     /**
      * Update payment types data by id
      * 
-     * @param array $request, int $id
+     * @param array $request
+     * @param int $id
      * @return bool
      * 
      */

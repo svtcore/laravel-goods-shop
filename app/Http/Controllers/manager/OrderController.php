@@ -22,8 +22,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Check if user authorized then redirect
-     * to orders
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -39,8 +40,10 @@ class OrderController extends Controller
     }
 
     /**
-     * Get order by id
-     * return recived data to view 
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -59,9 +62,10 @@ class OrderController extends Controller
     }
 
     /**
-     * Get order data and get available 
-     * payments methods
-     * Return view with both data
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -82,8 +86,11 @@ class OrderController extends Controller
     }
 
     /**
-     * Checking type of update and call function
-     * to update order status
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\manager\orders\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {

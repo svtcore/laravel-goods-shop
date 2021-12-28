@@ -32,7 +32,7 @@ class Managers
      * Formation data to array and create record in db
      * 
      * @param array $validated
-     * @return int or bool
+     * @return int|bool
      * 
      */
     public function add(array $request): int|bool

@@ -18,7 +18,9 @@ class ManagerController extends Controller
     }
 
     /**
-     * Getting manager list with count of orders they taken
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -32,6 +34,11 @@ class ManagerController extends Controller
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         try{
@@ -43,9 +50,10 @@ class ManagerController extends Controller
     }
 
     /**
-     * Validate request data through Requests\ManagerRequest
-     * and if data validate 
-     * run the function addManager for formation and record data
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Http\Requests\admin\managers\StoreRequest  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
     {
@@ -60,7 +68,10 @@ class ManagerController extends Controller
     }
 
     /**
-     * Getting data from requested id and return view with it
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -75,8 +86,11 @@ class ManagerController extends Controller
     }
 
     /**
-     * Validate data through Requests\ManagerRequest and 
-     * run function updateManager for formation and update data
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\admin\managers\UpdateRequest $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, $id)
     {
@@ -94,7 +108,10 @@ class ManagerController extends Controller
     }
 
     /**
-     * Deleteting record
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
