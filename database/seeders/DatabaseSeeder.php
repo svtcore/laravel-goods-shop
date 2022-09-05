@@ -28,13 +28,37 @@ class DatabaseSeeder extends Seeder
     {
         $data = [
             'admins' => 5,
-            'users' => 100,
+            'users' => 15,
             'managers' => 20,
             'categories' => 5,
-            'products' => 100,
+            'products' => 30,
             'payments' => 5,
-            'orders' => 300
+            'orders' => 80
         ];
+        /**
+         * Create manual credentials
+         */
+        Admin::factory()->create([
+            'admin_fname' => 'John',
+            'admin_lname' => 'Doe',
+            'admin_phone' => '380112233444',
+            'password' => bcrypt('adminpassword'),
+            'email' => 'admin@admin.com',
+        ]);
+        User::factory()->create([
+            'user_fname' => 'First',
+            'user_lname' => 'User',
+            'user_phone' => '1234567890',
+            'password' => bcrypt('userpassword'),
+            'email' => 'user@user.com',
+        ]);
+        Manager::factory()->create([
+            'manager_fname' => 'First',
+            'manager_lname' => 'Manager',
+            'manager_mname' => 'Name',
+            'manager_phone' => '380223344555',
+            'password' => bcrypt('managerpassword'),
+        ]);
         Admin::factory($data['admins'])->create();
         User::factory($data['users'])->create();
         Manager::factory($data['managers'])->create();
@@ -60,7 +84,7 @@ class DatabaseSeeder extends Seeder
 
         for ($j = 1;$j <= $data['orders']; $j++){
                 Order::factory()->create(['f_user_id' => rand(1,$data['users']), 'f_manager_id' => rand(1, $data['managers']),'f_pay_t_id' => rand(1,$data['payments'])]);
-                for ($i = 1;$i <=rand(1,10);$i++)
+                for ($i = 1;$i <=rand(1,5);$i++)
                     OrderProduct::factory()->create(['f_product_id' => rand(1,$data['products']), 'f_order_id' => $j]);
                 UserAddress::factory()->create(['f_order_id' => $j]);
         }
