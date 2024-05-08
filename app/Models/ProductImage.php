@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
 class ProductImage extends Model
 {
-    use HasFactory, SoftDeletes, SoftCascadeTrait;
+    use HasFactory, SoftDeletes;
 
     protected $primaryKey = "product_image_id";
     public $timestamps = true;

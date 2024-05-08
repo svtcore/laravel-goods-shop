@@ -128,7 +128,13 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputState">{{ __('admin_product_new.category')}}</label>
-                    {!! Form::select('size', $catg, 1, ['name' => 'product_categ', 'class'=>'form-control']); !!}
+                    <select name="product_categ" class="form-control">
+                        @foreach($catg as $key => $value)
+                        <option value="{{ $key }}" {{ $key == 1 ? 'selected' : '' }}>
+                            {{ $value }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="form-row">

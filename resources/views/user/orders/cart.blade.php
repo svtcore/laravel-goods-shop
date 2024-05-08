@@ -164,7 +164,14 @@
                   </div>
                   <div class="form-group col-md-6">
                     <label for="inputState">{{ __('user_cart.payment_type') }}</label>
-                    {!! Form::select('size', $payment, '1', ['name' => 'payment', 'class'=>'form-control']); !!}
+                    <select name="payment" class="form-control">
+                      @foreach($payment as $key => $value)
+                      <option value="{{ $key }}" {{ $key == '1' ? 'selected' : '' }}>
+                        {{ $value }}
+                      </option>
+                      @endforeach
+                    </select>
+
                   </div>
                 </div>
                 <div class="form-row">

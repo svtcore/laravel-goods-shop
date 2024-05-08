@@ -122,7 +122,13 @@
               </div>
               <div class="form-group col-md-6">
                 <label for="inputState">{{ __('manager_order_edit.payment_type') }}</label>
-                {!! Form::select('size', $payment, $order->f_pay_t_id, ['name' => 'payment', 'class'=>'form-control']); !!}
+                <select name="payment" class="form-control">
+                  @foreach($payment as $key => $value)
+                  <option value="{{ $key }}" {{ $key == $order->f_pay_t_id ? 'selected' : '' }}>
+                    {{ $value }}
+                  </option>
+                  @endforeach
+                </select>
               </div>
               <div class="form-group col-md-12">
                 <label for="inputEmail4">{{ __('manager_order_edit.status') }}</label>
